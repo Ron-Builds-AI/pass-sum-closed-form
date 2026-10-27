@@ -1,0 +1,20 @@
+PASS A1 closed forms of Q_n(-l) and Q_n'(-l) against dual numbers from the definition (p -8..2, l max(0,-p)..80)  855 pairs, mismatches 0 []
+PASS A2 the p = 0, 1, 2 lines: Q_{l+p}(-l), G_l L = R_l Q, Q'_{l+1}(-l) for l >= 1 and Q_1'(0) = 1 (l 0..80)
+PASS A3 F_0 at p = 2, 1, 0 from Lemma 4.2 (c) equals the printed forms exactly (xi = 1/2, 3/7, 9/28, 2/3, 3/31)
+PASS A4 unmet poles: H(1) = H(2) = 1/2, Q_0 = 1, Q_1(1) = 5, so u^-1/(2L) at p = 1 and (u^-2 + 5u^-1)/(2L) at p = 2
+PASS A5 H^0_l = R_l (psi(l+1) - psi(l+3)) = -R_l (1/(l+1) + 1/(l+2)) (l 0..29)
+PASS A6 Archimedes: (y, b) = (265, 153) is the j = 4 member of y^2 - 3b^2 = -2; at p = -74, l = 359, (U, V) = (153, 571) and V - 2U = 265; 265/153 < sqrt3 < 1351/780 (by squares); 1351^2 - 3*780^2 = 1, so the upper bound is not on the -2 chain
+PASS A11 Davies' Table 2: its -2 rows are the chain members j = 1..5 and its +1 rows (1351/780 among them) are not on the chain; both of Heath's ratios in Proposition 3 equal sqrt3 : 1
+PASS A12 the other side: (2+sqrt3)(2-sqrt3) = 1; with (2+sqrt3)^j = a_j + c_j sqrt3, (2+sqrt3)^j + (2-sqrt3)^j = 2a_j and a_j^2 - 3c_j^2 = 1; b_j = a_j + c_j, y_j = a_j + 3c_j, y_j^2 - 3b_j^2 = -2 (j 0..60; equal to the chain for j <= 10)
+PASS A13 horizon: the five classically stable points have kappa = (q/xi)^2 < 1 and ratio q/xi^2 > 1 (1.25 to 12.5); with r = q xi^-2 the ratio is r
+PASS A14 eq. 14: (l_P/D)(m_P/l_P^3) at D = 1 m = 8.332e+58 g/cm^3, 9.921 decades above the printed 1e49
+PASS A16 sum zeta(2m)/((2m+1)4^m) = int_0^1/2 (1 - pi t cot pi t) dt = (1 - ln2)/2 = 0.15342640972; int pi t cot pi t = ln2/2; -ln(ln 2) = 0.366513; (1/4) ln 10 = 0.575646
+PASS A7 the staircase data (k = 2, 3, 4) equal the walk by S and T from (1, k), and Q_n(-l) = 0 at every corner from the definition
+PASS A8 bridge figure: the 11 dots lie exactly on U^2 - 4UV + V^2 = -2; every drawn curve point lies on it within its own 10-digit rounding  curve points 1061, worst residual 0.94 of its rounding bound
+PASS A9 X(s) = cosh((s - 1/2) theta)/cosh(theta/2), cosh theta = k/2: X(i) = u_i at whole i, and (X(s), X(s+1)) stays on U^2 - kUV + V^2 = 2 - k (k 3..10)  worst scaled residual 2.9e-40
+PASS A10 weights c0, c1, c2: Q_{p+l}(-l) = 0 exactly when c0 t(t-1) - c1 t x + c2 x(x-1) = 0 (six weight sets, p -30..1, l <= 200)  35802 values
+PASS B1 F_l and G_l from Lemma 4.2 (c) against the Laurent coefficients of H Phi read off a circle of radius 1/4 (96 points) around -l, Phi by the continuation series  50 (xi, p, l), worst 4.1e-40 for F and 1.2e-39 for G (relative, or absolute below 1)
+PASS B2 the two closed forms of Phi^0_l agree (l = 8, 12, 20; the k-sum to 400 shells, no tail)  24 (xi, p, l), worst 3.5e-27
+PASS A15 p*: the zero of g0 + 4g1 + g2 at xi = 1/40 is 1.951670458134053920802 (one sign change on 49 points of [1.94, 1.97]); Phi(0) by the continuation series equals the finite form at p = 1.93
+     18 checks, 93.1 s (machine clock 2026-10-27 06:56:27)
+ALL PASS
