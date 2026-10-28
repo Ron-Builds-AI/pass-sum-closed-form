@@ -1,8 +1,8 @@
 # Proof pieces for a Mellin-Barnes closed form of a pass sum
 
-Ronald Lee Hampton Jr., VetTech Homefront LLC. 27 October 2026.
+Ronald Lee Hampton Jr., VetTech Homefront LLC. 27 October 2026. Version 1.0, 28 October 2026.
 
-PRIVATE DRAFT. Not public until the author makes it public.
+Collaborator: Elena Gortcheva, PhD, Program Director, Data Analytics.
 
 ## What this is
 
@@ -27,10 +27,14 @@ through a Mellin-Barnes representation, with written proofs of the pieces the au
 ## Files
 
 - `paper/Hampton_pass-sum_proof-pieces_2026-10-27_r5b.pdf` and `.tex` (with its plot data in `paper/fig_r5/`): the proof pieces.
-- `paper/Hampton_problem-statement-and-references_2026-10-27.pdf`: the problem stated with every symbol and its range, and references.
+- `paper/Hampton_problem-statement_for-outside-readers_2026-10-28.pdf`: the problem stated with every symbol and its range, where the
+  logarithms vanish (the Pell chain), the standing, and references (five pages).
 - `checks/`: the checking scripts (Python) and what they printed.
-- `SHA256SUMS.txt`: a fingerprint of every file. `SHA256SUMS.txt.ots`: an OpenTimestamps proof that this list of fingerprints existed
-  on 27 October 2026 (it carries only the list's hash; verifiable at opentimestamps.org).
+- `CITATION.cff`: how to cite this work.
+- `SHA256SUMS.txt`: a fingerprint of every file in this version. `SHA256SUMS.txt.ots`: an OpenTimestamps proof for that list (it carries
+  only the list's hash; verifiable at opentimestamps.org); it is pending until the Bitcoin chain confirms it, a few hours after it is made.
+- `timestamps/SHA256SUMS_2026-10-27.txt` and its `.ots`: the first version's fingerprint list (27 October 2026) and its OpenTimestamps
+  proof, confirmed in Bitcoin blocks 973446 and 973453.
 
 ## License
 

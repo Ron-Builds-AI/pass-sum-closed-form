@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Proof pieces for a Mellin-Barnes closed form of a pass sum"
+authors:
+  - given-names: "Ronald Lee"
+    family-names: "Hampton"
+    name-suffix: "Jr."
+    affiliation: "VetTech Homefront LLC"
+version: "1.0"
+date-released: "2026-10-28"
+license:
+  - "CC-BY-4.0"
+  - "MIT"
+repository-code: "https://github.com/Ron-Builds-AI/pass-sum-closed-form"
+abstract: >-
+  A pass sum from Kim and Thorne (1991), written in a closed form through a Mellin-Barnes representation, with written proofs of the
+  pieces an earlier draft left open, and the integer values where the logarithmic terms vanish: a chain given by the Pell-type equation
+  y^2 - 3b^2 = -2. Checked by exact arithmetic and high-precision numerics; not yet read by a mathematician.
+keywords:
+  - "Mellin-Barnes integral"
+  - "asymptotic expansion"
+  - "Pell equation"
+  - "closed form"
