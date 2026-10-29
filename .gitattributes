@@ -1,2 +1,4 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Text files are stored and checked out with LF line ends on every platform, so SHA256SUMS.txt matches any clone
+* text=auto eol=lf
+*.pdf binary
+*.ots binary

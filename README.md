@@ -32,13 +32,16 @@ through a Mellin-Barnes representation, with written proofs of the pieces the au
 ## Files
 
 - `paper/Hampton_pass-sum_proof-pieces_2026-10-27_r5d.pdf` and `.tex` (with its plot data in `paper/fig_r5/`): the proof pieces,
-  version 1.1. The version 1.0 files, `..._r5b.pdf` and `.tex`, stay beside them.
-- `paper/Hampton_problem-statement_for-outside-readers_2026-10-28.pdf`: the problem stated with every symbol and its range, where the
-  logarithms vanish (the Pell chain), the standing, and references (five pages; written for version 1.0).
+  version 1.1. The version 1.0 files, `..._r5b.pdf` and `.tex`, stay beside them. Where the paper cites the author's working records by
+  file name (in typewriter type), those records are not in this repository.
+- `paper/Hampton_problem-statement_for-outside-readers_2026-10-28_r2.pdf`: the problem stated with every symbol and its range, where
+  the logarithms vanish (the Pell chain), the standing, and references (five pages; revised for version 1.1). The version 1.0 page,
+  without `_r2`, stays beside it.
 - `checks/`: the checking scripts (Python) and what they printed. `check_r5d_2026-10-29.py` is the checker of version 1.1 (22 checks).
   The earlier checkers look for the plot data in `fig_r5/` beside `checks/`; to run one, copy `paper/fig_r5/` there first.
 - `CITATION.cff`: how to cite this work.
-- `SHA256SUMS.txt`: a fingerprint of every file in this version, as committed (LF line ends). `SHA256SUMS.txt.ots`: an OpenTimestamps
+- `SHA256SUMS.txt`: a fingerprint of every file in this version; text files carry LF line ends in every clone, so the list matches
+  any checkout or download. `SHA256SUMS.txt.ots`: an OpenTimestamps
   proof for that list (it carries only the list's hash; verifiable at opentimestamps.org), submitted on 29 October 2026; it is complete
   once the Bitcoin chain confirms it.
 - `timestamps/SHA256SUMS_2026-10-28.txt` and its `.ots`: version 1.0's fingerprint list (28 October 2026) and its OpenTimestamps proof,
