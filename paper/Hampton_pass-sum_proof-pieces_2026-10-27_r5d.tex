@@ -1,0 +1,996 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{pdftitle={Proof pieces for a Mellin-Barnes closed form of a pass sum},pdfauthor={Ronald Lee Hampton Jr.}}
+
+\newcommand{\re}{\operatorname{Re}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\row}{\operatorname{row}}
+\newcommand{\Har}{\mathcal{H}}
+\newcommand{\rec}[1]{\nolinkurl{#1}}
+\makeatletter\g@addto@macro\UrlBreaks{\do\_\do\-\do\.}\makeatother
+
+\title{Proof pieces for a Mellin-Barnes closed form of a pass sum: Lemma L, Theorems P1, P2 and P3, and where the logarithms vanish}
+\author{Ronald Lee Hampton Jr., VetTech Homefront LLC}
+\date{27 October 2026; revised 29 October 2026}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Status.} This note writes out proofs of the three pieces that the author's proof draft of 27 September 2026 [D] left open, together with the tool these proofs rest on. The tool is Lemma L, an exact representation of $\Phi(s)$ (notation of Section~\ref{sec:setting}) on the half plane $\re s<0$ as an absolutely convergent double series of continued Beta functions (Section~\ref{sec:L}). The pieces are a growth bound for $\Phi$ far to the left, at every real $p$ (Theorem P3, Section~\ref{sec:P3}), the expansion of $\Psi(u)$ for $0<u<1$ at every $p<3$, integer $p$ included (Theorem P1, Section~\ref{sec:P1}), and what converges for $u\ge1$ (Theorem P2, Section~\ref{sec:P2}). Section~\ref{sec:chain} adds where the residues at the meeting poles vanish at integer $p$: exactly on a chain of integers given by the Pell-type equation $y^2-3b^2=-2$, $b=5-2p$ (Proposition 4.4); a sweep in $p$ found the same set in exact arithmetic (Section~\ref{sec:sweep}). Section~\ref{sec:coeff} writes out the coefficients $F_l$ and $G_l$ of the logarithmic expansion in closed form, with their values at $p=0,1,2$ and the terms of the unmet poles. Section~\ref{sec:family} carries the vanishing set to the weights $(1,k,1)$ for every integer $k$: a descent by two root swaps (Vieta jumping) reduces every vanishing pair to $(p,l)=(1,k)$, and at $k=4$ each vanishing pair is two neighbouring solutions of the Pell-type equation, so the Pell descent and the swap descent are one descent (Propositions W and B); its last subsection sets this beside the classical record of Pell's equation, Archimedes' bound $265/153$ for $\sqrt3$ included. Section~\ref{sec:earlier} gathers earlier checks from the author's record, the source paper's eq.~67 on the Cauchy horizon among them, and Appendix~\ref{sec:appendix} two short pieces of other checked math from the same notebook. The status of every proof in this note, stated once here and again at Lemma L, is: checked by an AI instrument, read by no mathematician. The word ``Theorem'' is used only as the label of a numbered statement with its proof attached. The numerical comparisons of Section~\ref{sec:num} are evidence beside the proofs, never proof. Nothing here is called new. The case $q_m=0$ of Lemma L is Ueno and Nishizawa's \cite{UN}; five papers have been read for its lineage, and a fuller literature search remains (Section~\ref{sec:lineage}). The physical reading of the model belongs to its authors, Kim and Thorne [KT]; nothing here rests on it or claims it.
+
+\section{Setting, notation and lineage}\label{sec:setting}
+
+\subsection{The object}
+
+Fix real parameters $0<\xi<1$ and $r>0$, and let $u>0$. For each integer $N\ge1$ put
+\[
+w_N=\xi^N,\quad a_N=r^N\bigl(1+4w_N+w_N^2\bigr),\quad b_N=\xi^{-N}-1,\quad h(y)=(1+y)^{-3},
+\]
+and
+\[
+\Psi(u)=\sum_{N\ge1}a_N\,h(u\,b_N).
+\]
+Write $L=\ln(1/\xi)>0$ and $p=\ln r/L$, so that $r=\xi^{-p}$; the number $p$ may be any real number. The sum converges for $u>0$ exactly when $p<3$ [PS, Section~1]. Up to a change of variables it is the sum over $N$ in [KT, eq.~67], where it is left unevaluated.
+
+For $0<\re s<3$ let
+\[
+H(s)=\int_0^\infty y^{s-1}h(y)\,dy=\frac{\Gamma(s)\,\Gamma(3-s)}{2}=\frac{\pi(1-s)(2-s)}{2\sin\pi s},
+\]
+continued meromorphically to $\mathbb{C}$, and let
+\[
+\Phi(s)=\sum_{N\ge1}a_N\,b_N^{-s},
+\]
+which converges absolutely for $\re s>p$. For $p<3$, $u>0$ and $\max(0,p)<c<3$,
+\begin{equation*}
+\Psi(u)=\frac{1}{2\pi i}\int_{\re s=c}H(s)\,\Phi(s)\,u^{-s}\,ds. \tag{MB}
+\end{equation*}
+The method, a Mellin-Barnes integral and its residue expansions, is standard [FGD], [PK], [DLMF, Section~2.5].
+
+\subsection{Notation}\label{sec:notation}
+
+Throughout, $(c_0,c_1,c_2)=(1,4,1)$, and for complex $z$ and an integer $j\ge0$, $\binom{z}{j}=z(z-1)\cdots(z-j+1)/j!$. Put
+\[
+\tau_k=\frac{2\pi k}{L}\quad(k\in\mathbb{Z}),\qquad q_m=p-m\quad(m=0,1,2),
+\]
+\[
+\rho_n(s)=\frac{1}{e^{L(n+s-p)}-1}\quad(n\ge0),\qquad g_j=\frac{1}{e^{L(j-p)}-1}\quad(j\in\mathbb{Z},\ j\ne p),
+\]
+\[
+Q_n(s)=\sum_{m=0}^{\min(2,n)}c_m\binom{s+n-m-1}{n-m}.
+\]
+The $g_j$ are the continued geometric sums: $g_j=\sum_{N\ge1}(r\xi^j)^N$ when $j>p$, and $\rho_n(-l)=g_{n-l}$. The candidate poles of $\Phi$ form the set
+\[
+\mathcal{P}=\{\,s_{n,k}=p-n-i\tau_k:\ n\ge0,\ k\in\mathbb{Z}\,\};
+\]
+$s_{n,k}$ is the point $p-n-2\pi ik/L$ of [PS]. A point of $\mathcal{P}$ with $Q_n(s_{n,k})=0$ is a regular point of $\Phi$ but stays in $\mathcal{P}$, and $\mathcal{P}$ is closed under complex conjugation. For $l\ge0$ let $R_l=(-1)^l\binom{l+2}{2}=\Res_{s=-l}H$. Near $s=-l$,
+\[
+H(s)=\frac{R_l}{s+l}+H^0_l+O(s+l),\qquad H^0_l=-R_l\Bigl(\frac1{l+1}+\frac1{l+2}\Bigr),
+\]
+from $\Gamma(-l+\varepsilon)=\frac{(-1)^l}{l!}\bigl(\varepsilon^{-1}+\psi(l+1)+O(\varepsilon)\bigr)$ and $\Gamma(3+l-\varepsilon)=(l+2)!\bigl(1-\varepsilon\psi(l+3)+O(\varepsilon^2)\bigr)$. For $j\ge0$, $\Har_j=1+\frac12+\dots+\frac1j$ is the $j$-th harmonic number, $\Har_0=0$; the letter $H$ alone is always the Mellin transform. For an integer $K\ge1$, a line $\re s=\sigma_K$ is \emph{admissible} if $\sigma_K\in(-K-1,-K)$ has distance at least $1/8$ from $\mathbb{Z}$ and from $p+\mathbb{Z}$; such a $\sigma_K$ exists, since the excluded part of the interval has measure at most $1/2$. The letter $C$ denotes a positive constant that depends only on the parameters named; its value may change from line to line.
+
+In this notation, the two residue expansions of [PS] referred to below are these. C1, for $u>\xi/(1-\xi)$:
+\[
+\Psi(u)=\sum_{l\ge0}(-1)^l\binom{l+2}{2}u^{-(3+l)}\,\Phi(3+l).
+\]
+C2, for $0<u<1$ and $p$ not an integer:
+\[
+\Psi(u)=\sum_{l\ge0}R_l\,\Phi(-l)\,u^l+\frac1L\sum_{n\ge0}\sum_{k\in\mathbb{Z}}H(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}}.
+\]
+At an integer $p$, the pole of $H$ at $-l$ and the pole of $\Phi$ at $p-n$ with $n=l+p$ meet, and the expansion changes form (C3 of [PS]; Theorem P1~(ii) below).
+
+\subsection{What is used from the draft of 27 September 2026}\label{sec:draft}
+
+The following results of [D] are used as stated there. Claims 1.1 to 1.3: the closed form of $H$; its poles, all simple, at $0,-1,-2,\dots$ and at $3,4,5,\dots$, with $\Res_{s=-l}H=R_l$; and Mellin inversion of $h$. Claims 2.1 to 2.3: $\Psi$ converges for $u>0$ exactly when $p<3$; $\Phi$ converges absolutely for $\re s>p$; and the integral (MB). Claim 3.1: $\Phi$ continues to a meromorphic function on $\mathbb{C}$,
+\[
+\Phi(s)=\sum_{n\ge0}Q_n(s)\,\rho_n(s),
+\]
+the series converging locally uniformly off $\mathcal{P}$, with poles only in $\mathcal{P}$, all simple, and residue $Q_n(s_{n,k})/L$ at $s_{n,k}$ (a regular point when $Q_n(s_{n,k})=0$). Claim 5.4 of [D] is compared with Lemma L below and is not otherwise used, and nothing else of [D] is assumed. The independent check behind the status line re-read Claims 1.1 to 3.1 and did not re-derive them line by line. Claim 3.1 is [KKW, Proposition~1], regrouped (Section~\ref{sec:lineage}); its few lines are written out here, so that this note does not rest on [D] for it.
+
+\noindent\emph{Claim 3.1, written out.} Let $\re s=\sigma>p$. Since $b_N=\xi^{-N}(1-\xi^N)$ with $0<\xi^N<1$, the binomial series $(1-\xi^N)^{-s}=\sum_{j\ge0}\binom{s+j-1}{j}\xi^{Nj}$ and $a_N=\sum_mc_m\,r^N\xi^{Nm}$ give
+\[
+a_N\,b_N^{-s}=\sum_{m}\sum_{j\ge0}c_m\binom{s+j-1}{j}\,r^N\xi^{N(s+m+j)}.
+\]
+The triple series over $N\ge1$, $m$ and $j\ge0$ converges absolutely: $|\binom{s+j-1}{j}|\le\binom{|s|+j-1}{j}$, so for each $m$ the sum over $j$ of the absolute values is at most $c_m\,r^N\xi^{N(\sigma+m)}(1-\xi^N)^{-|s|}\le c_m(1-\xi)^{-|s|}\xi^{N(\sigma-p)}$, which is summable over $N$. Summing first over $N$, with $n=m+j$, gives $\sum_{N\ge1}(r\xi^{s+n})^N=\rho_n(s)$, since $|r\xi^{s+n}|=\xi^{\sigma+n-p}<1$, and collecting the terms with $m+j=n$ gives $Q_n(s)$; so $\Phi=\sum_nQ_n\rho_n$ on $\re s>p$. On a compact set $\Omega\subset\mathbb{C}\setminus\mathcal{P}$, put $M_\Omega=\max_\Omega|s|$ and $\sigma_\Omega=\min_\Omega\re s$. Since $\binom{a+j-1}{j}=\prod_{i=1}^j\bigl(1+\frac{a-1}{i}\bigr)\le e^a(j+1)^a$ for $a\ge0$ (for $a\ge1$ by $1+u\le e^u$ and $\Har_j\le1+\ln j$; for $0\le a<1$ every factor lies in $[0,1]$), $|Q_n(s)|\le6e^{M_\Omega}(n+1)^{M_\Omega}$ on $\Omega$, and $|\rho_n(s)|\le2e^{-L(n+\sigma_\Omega-p)}$ once $L(n+\sigma_\Omega-p)\ge\ln2$; so the series converges uniformly on $\Omega$, and its sum continues $\Phi$ to $\mathbb{C}\setminus\mathcal{P}$. Finally, $e^{L(n+s-p)}-1$ has simple zeros exactly at the points $s_{n,k}$, $k\in\mathbb{Z}$, with derivative $L$ there, so $\rho_n$ has a simple pole with residue $1/L$ at each. No other term is singular at $s_{n,k}$, since the rows have different real parts $p-n$, and the tail bound above does not use the distance to $\mathcal{P}$; so $\Phi$ is meromorphic on $\mathbb{C}$, with at most a simple pole at $s_{n,k}$ and residue $Q_n(s_{n,k})/L$ there.
+
+\subsection{Lineage: the continuation is that of Kaneko, Kurokawa and Wakayama}\label{sec:lineage}
+
+What follows was checked on 24 October 2026 against the arXiv version of [KKW] (math/0206171, version 2, all 14 pages). In this subsection only, as in [KKW], $q$ denotes $\xi$; put $[N]_q=(1-q^N)/(1-q)$. Since $r=q^{-p}$,
+\[
+b_N=q^{-N}(1-q)\,[N]_q,\qquad a_N=\sum_{m=0}^{2}c_m\,q^{N(m-p)},
+\]
+so that
+\[
+\Phi(s)=(1-q)^{-s}\bigl[f_q(s,s-p)+4f_q(s,s-p+1)+f_q(s,s-p+2)\bigr],
+\]
+with $f_q(s,t)=\sum_{N\ge1}q^{Nt}/[N]_q^{\,s}$. This $f_q$ is the function of [KKW, eq.~(4), p.~3], absolutely convergent for $\re t>0$, which here is $\re s>p$. By [KKW, Proposition~1, p.~3], writing $j$ for their summation index (since $r$ is a parameter here),
+\[
+f_q(s,t)=(1-q)^s\sum_{j\ge0}\binom{s+j-1}{j}\frac{q^{t+j}}{1-q^{t+j}},
+\]
+meromorphic on $\mathbb{C}^2$, with simple poles at $t\in\mathbb{Z}_{\le0}+2\pi i\mathbb{Z}/\log q$. With $t=s+m-p$, $q^{t+j}/(1-q^{t+j})=\rho_{j+m}(s)$, so
+\[
+(1-\xi)^{-s}f_\xi(s,s+m-p)=\sum_{j\ge0}\binom{s+j-1}{j}\rho_{j+m}(s),
+\]
+and the continuation $\Phi=\sum_nQ_n\rho_n$ of Claim 3.1 is [KKW, Proposition~1] applied to the three terms and regrouped by $n=j+m$. The continuation of $\Phi$ and its pole lattice are therefore theirs; this note cites them for both and claims nothing there. Their $q$-analogue of the zeta function, $\zeta_q(s)=f_q(s,s-1)$ [KKW, p.~4], is one line of this family; it is not $\Phi$.
+
+Lemma L is not in [KKW]. The nearest formula there, [KKW, eq.~(13), p.~11], is of Euler-Maclaurin type: the periodic Bernoulli polynomial is replaced by its Fourier series, which gives incomplete beta integrals at the shifts $2\pi in/\log q$. It is written for $t=s-1$ only, for $\re s>1$, and continued by integration by parts. A footnote on p.~11 of [KKW] credits Ueno and Nishizawa with the Fourier-expansion idea, and [KKW, Remark~1, p.~4] says that Ueno and Nishizawa used $t=s$. For the term with shift $q_m=0$, formula (L) is the $q$-analogue of the functional equation of Ueno and Nishizawa \cite[Theorem~3, eq.~(32) together with eq.~(27), at $z=1$]{UN}; the two agree numerically at a checked point. The form with a general shift $q_m$ in both Gamma arguments, written as an absolutely convergent double series of Beta functions and proved by residues, was not found in the papers read (Ueno and Nishizawa \cite{UN}; Cherednik \cite{Ch}; Wakayama and Yamasaki \cite{WY}; Kawagoe, Wakayama and Yamasaki \cite{KWY}; Kaneko, Kurokawa and Wakayama \cite{KKW}), [KKW] read in full and the others by targeted reads; that is a statement about those papers, not about the literature.
+
+\section{The left representation (Lemma L)}\label{sec:L}
+
+\noindent\textbf{Lemma L} (checked by an AI instrument, read by no mathematician). Let $p$ be real. For every $s$ with $\re s<0$ and $s\notin\mathcal{P}$,
+\begin{equation*}
+\Phi(s)=\frac1L\sum_{m=0}^{2}c_m\sum_{k\in\mathbb{Z}}\frac{\Gamma(1-s)\,\Gamma(s-q_m+i\tau_k)}{\Gamma(1-q_m+i\tau_k)}, \tag{L}
+\end{equation*}
+the double series converging absolutely, and locally uniformly on $\{\re s<0\}\setminus\mathcal{P}$. Since $1/\Gamma$ is entire, a term with $1-q_m+i\tau_k\in\{0,-1,-2,\dots\}$ is zero.
+
+\medskip
+For a shift $q_m=0$ (one of the three when $p$ is $0$, $1$ or $2$), the $k$-sum of that term of (L) is, in the normalization of Section~\ref{sec:lineage}, the sum of Theorem~3 of Ueno and Nishizawa \cite[eq.~(32), at $z=1$]{UN} and the correction term of their eq.~(27), which is the $k=0$ term $\pi/(L\sin\pi s)$ of (L).
+
+\medskip
+Each term of (L) is a continued Beta function, $B(1-s,\,s-q_m+i\tau_k)$. At $s=-l$ with $l\ge1$ and $p$ not an integer (so that $-l\notin\mathcal{P}$), the identity
+\[
+\frac{\Gamma(-l-q+i\tau)}{\Gamma(1-q+i\tau)}=(-1)^{l+1}\frac{\Gamma(q-i\tau)}{\Gamma(l+1+q-i\tau)},
+\]
+which follows from two reflections, turns (L) into
+\[
+\Phi(-l)=\frac{(-1)^{l+1}\,l!}{L}\sum_{m=0}^{2}c_m\sum_{k\in\mathbb{Z}}\frac{\Gamma(q_m-i\tau_k)}{\Gamma(l+1+q_m-i\tau_k)}.
+\]
+After $k\to-k$ this is Claim 5.4 of [D], the formula proved there by Rice's integral for $l\ge1$. Lemma L extends it from the points $-l$ to the whole half plane $\re s<0$, complex $s$ included.
+
+\begin{proof}
+Fix $m$, write $q=q_m$, fix $s=\sigma+it$ with $\sigma<0$ and $s\notin\mathcal{P}$, and put, for complex $z$,
+\[
+\mathcal{K}(z)=\frac{\Gamma(z)\,\Gamma(1-s)}{\Gamma(1+z-s)}\,E(s-q-z),\qquad E(w)=\frac{1}{e^{Lw}-1}.
+\]
+
+\emph{Poles of $\mathcal{K}$.} (i) At $z=-j$ ($j\ge0$), from $\Gamma(z)$: $\Res_{z=-j}\Gamma(z)=(-1)^j/j!$, and $\Gamma(1-s)/\Gamma(1-j-s)=(-1)^js(s+1)\cdots(s+j-1)$, so the residue is
+\[
+\binom{s+j-1}{j}E(s-q+j)=\binom{s+j-1}{j}\rho_{j+m}(s).
+\]
+(ii) At $z_k=s-q-i\tau_k$ ($k\in\mathbb{Z}$), from $E$: near $w_k=i\tau_k$, $E(w)=1/\bigl(L(w-w_k)\bigr)+O(1)$, and $w-w_k=-(z-z_k)$, so the residue is
+\[
+-\frac1L\,\frac{\Gamma(z_k)\,\Gamma(1-s)}{\Gamma(1+z_k-s)}=-\frac1L\,\frac{\Gamma(1-s)\,\Gamma(s-q-i\tau_k)}{\Gamma(1-q-i\tau_k)}.
+\]
+Where $1-q-i\tau_k$ is a non-positive integer ($k=0$ and $q$ a positive integer), $1/\Gamma(1+z-s)$ vanishes at $z_0$ and cancels the pole of $E$; $\mathcal{K}$ is regular there, and the value $0$ of the formula is right. The two families do not meet: $z_k=-j$ would mean $s=p-(m+j)+i\tau_k=s_{m+j,-k}\in\mathcal{P}$. Finally, $\Gamma(1-s)$ is finite because $\re(1-s)>1$, and $1/\Gamma(1+z-s)$ is entire.
+
+\emph{Contour.} Integrate $\mathcal{K}$ over the boundary of the rectangle with vertical sides $\re z=-M-\frac12$ and $\re z=\Lambda$ and horizontal sides $\im z=t\pm\frac{2\pi}{L}\bigl(\kappa+\frac12\bigr)$, with integers $M,\kappa\ge1$ and $\Lambda>0$, taking $M\ge M_0(s,q)$ so that $-M-\frac12<\sigma-q$ and the bounds on the left side below apply, and $\Lambda\ge\Lambda_0(s,q)\ge\sigma-q+1$; then, for $\kappa$ with $\frac{2\pi}{L}\bigl(\kappa+\frac12\bigr)>|t|$, every pole $-j$ with $j\le M$ and every $z_k$ with $|k|\le\kappa$ lies inside the rectangle. On the horizontal sides $\im\bigl(L(s-q-z)\bigr)=\mp2\pi\bigl(\kappa+\frac12\bigr)$, so $e^{L(s-q-z)}$ is a negative real number and $|E|\le1$.
+\begin{itemize}
+\item \emph{Horizontal sides}, as $\kappa\to\infty$ with $M$ and $\Lambda$ fixed. By Stirling's formula, uniform in vertical strips of bounded width [DLMF, 5.11.9], $|\Gamma(z)/\Gamma(1+z-s)|\le C(M,\Lambda,s)\,|\im z|^{\sigma-1}$, and $\sigma-1<0$. The sides have fixed length, so their integrals tend to $0$.
+\item \emph{Right side}, $\re z=\Lambda\ge\Lambda_0(s,q)$. The ratio asymptotics $\Gamma(z+a)/\Gamma(z+b)\sim z^{a-b}$ [DLMF, 5.11.12], uniform on $\re z\ge x_0$ by Binet's formula as in Lemma G (the two Binet expansions differ by $(a-b)\ln z+O\bigl((1+|a|+|b|)^2/\re z\bigr)$, with $|\mu(w)|<1/(12\re w)$ for complex $w$), together with $|z^{s-1}|=|z|^{\sigma-1}e^{-t\arg z}\le|z|^{\sigma-1}e^{\pi|t|/2}$, give $|\Gamma(z)/\Gamma(z+1-s)|\le C_s|z|^{\sigma-1}$; and $|E|\le1/(1-e^{-L})$ once $\re(s-q-z)\le-1$. The integral over the whole line is at most
+\[
+C\int_{-\infty}^{\infty}\bigl(\Lambda^2+y^2\bigr)^{(\sigma-1)/2}\,dy=C'\Lambda^{\sigma},
+\]
+which tends to $0$ as $\Lambda\to\infty$ because $\sigma<0$. This is where the half plane comes from.
+\item \emph{Left side}, $\re z=-M-\frac12$. By two reflections,
+\[
+\frac{\Gamma(z)}{\Gamma(1+z-s)}=-\frac{\sin\pi(z-s)}{\sin\pi z}\cdot\frac{\Gamma(s-z)}{\Gamma(1-z)}.
+\]
+On this line
+\[
+|\sin\pi z|=\cosh(\pi\im z),\qquad|\sin\pi(z-s)|\le e^{\pi|t|}\cosh(\pi\im z);
+\]
+also $|\Gamma(s-z)/\Gamma(1-z)|\le C_s|1-z|^{\sigma-1}$, since $\re(1-z)=M+\frac32$; and $|E(s-q-z)|\le2e^{-L(\sigma-q+M+1/2)}$ for $M\ge M_0(s,q)$. The integral over the whole line is $O(e^{-LM}M^{\sigma})$, which tends to $0$ as $M\to\infty$.
+\end{itemize}
+
+\emph{The residues (ii) are summable.} As $|\tau|\to\infty$, $|\Gamma(s-q-i\tau)/\Gamma(1-q-i\tau)|$ is of order $|\tau|^{\sigma-1}$ [DLMF, 5.11.9] (the factors $e^{-\pi|\tau|/2}$ cancel), so the series over $k$ of the residues (ii) converges absolutely, and it does so exactly when $\sigma<0$.
+
+Letting $\kappa\to\infty$ and then $M,\Lambda\to\infty$, the sum of all residues of $\mathcal{K}$ is therefore $0$:
+\[
+\sum_{j\ge0}\binom{s+j-1}{j}\rho_{j+m}(s)=\frac1L\sum_{k\in\mathbb{Z}}\frac{\Gamma(1-s)\,\Gamma(s-q-i\tau_k)}{\Gamma(1-q-i\tau_k)}.
+\]
+Multiply by $c_m$ and sum over $m$. The left side becomes $\sum_nQ_n(s)\rho_n(s)=\Phi(s)$ by Claim 3.1 (the regrouping $j=n-m$ is a finite rearrangement of convergent series), and replacing $k$ by $-k$ gives (L). On a compact subset of $\{\re s<0\}\setminus\mathcal{P}$ on which $\re s\le\sigma_1<0$, the $k$-terms are $O\bigl((1+|\tau_k|)^{\sigma_1-1}\bigr)$ uniformly, so the convergence is locally uniform. Near a point $s_{n,k}$ of $\mathcal{P}$ only the terms with $m+j=n$, at most three, are singular, and the same bound holds for the others uniformly on a neighbourhood of $s_{n,k}$, since it does not use the distance to $\mathcal{P}$; so the right side is meromorphic on $\re s<0$ with simple poles on $\mathcal{P}$, where its residue at $s_{n,k}$ is $\sum_mc_m\binom{s_{n,k}+n-m-1}{n-m}/L=Q_n(s_{n,k})/L$, the residue of Claim 3.1, and (L) is an identity of meromorphic functions on $\re s<0$.
+\end{proof}
+
+\noindent\textbf{Remark} (the domain is exact). The proof uses $\sigma<0$ at exactly three places, the two vertical sides of the rectangle (on each, the integral of $|z|^{\sigma-1}$ over the whole line converges exactly when $\sigma<0$) and the series of residues (ii), and nothing stronger. At $\sigma=0$ the $k$-terms are $O(|\tau_k|^{-1})$ and the series is not absolutely convergent; for $t\ne0$ its symmetric partial sums over $|k|\le K$ oscillate like $K^{it}/(it)$. So the open half plane is the exact domain of (L) as an absolutely convergent series. No branch cut enters: every Gamma argument is used as a value, $z^{s-1}$ appears only inside modulus bounds with $|\arg z|\le\pi/2$, and the reflection formulas are identities.
+
+\medskip
+\noindent\textbf{Remark} (where (L) comes from; not used in the proof). Formally, (L) is the Poisson-summation dual of the defining $N$-series. For $q<\re s<0$ the function $\nu\mapsto e^{-L\nu(s-q)}(1-e^{-L\nu})^{-s}$ has Fourier transform $\Gamma(1-s)\Gamma(s-q+i\tau)/\bigl(L\,\Gamma(1-q+i\tau)\bigr)$ at the frequencies $\tau_k$ (a Beta integral), which is how the $N$-sum turns into the $k$-sum. The same duality is behind the ripple of C4 in [PS]. When $p<0$ the two series share the strip $p<\re s<0$, and they agree there at every point tested (Section~\ref{sec:num}). This is also why a literature search is owed before anything about Lemma L is claimed (Section~\ref{sec:open}).
+
+\section{Tools, and the growth far to the left (Theorem P3)}\label{sec:P3}
+
+\subsection{Gamma-function estimates}
+
+\noindent\textbf{Lemma G} (Binet's formula in modulus form). For $x>0$ and real $y$,
+\[
+|\Gamma(x+iy)|=\Gamma(x)\,\exp\bigl(-x\,g(y/x)\bigr)\,\bigl(1+y^2/x^2\bigr)^{-1/4}e^{\eta},\qquad|\eta|\le\frac{1}{6x},
+\]
+where $g(v)=v\arctan v-\frac12\ln(1+v^2)$, and for all real $v$
+\[
+0\le g(v)\le\frac{v^2}{2},\qquad \frac\pi2|v|-\frac12\ln(1+v^2)-1\le g(v)\le\frac\pi2|v|-\frac12\ln(1+v^2).
+\]
+
+\begin{proof}
+Binet's first formula [WW, section 12.31], [DLMF, 5.9.10] (DLMF 5.9.10 checked at the source on 29 October 2026: it states the formula for $|\operatorname{ph}z|<\pi/2$ and attributes it to Whittaker and Watson, section 12.31, which was not opened): for $\re z>0$,
+\[
+\ln\Gamma(z)=\bigl(z-\tfrac12\bigr)\ln z-z+\tfrac12\ln(2\pi)+\mu(z),\qquad \mu(z)=\int_0^\infty f(t)\,e^{-zt}\,dt,
+\]
+with $f(t)=\bigl(\frac12-\frac1t+\frac{1}{e^t-1}\bigr)/t$. With $\theta=t/2$, $f(t)=(\theta\coth\theta-1)/(4\theta^2)$, and the partial fraction expansion $\coth\theta-1/\theta=\sum_{k\ge1}2\theta/(\theta^2+k^2\pi^2)$ lies strictly between $0$ and $\sum_k2\theta/(k^2\pi^2)=\theta/3$. So $0<f(t)<1/12$ and $|\mu(z)|\le\int_0^\infty f(t)e^{-xt}\,dt<1/(12x)$, where $x=\re z$. Take real parts with $z=x+iy$, $v=y/x$, $|z|=x(1+v^2)^{1/2}$ and $\arg z=\arctan v$:
+\begin{align*}
+\ln|\Gamma(z)|={}&\bigl(x-\tfrac12\bigr)\ln x+\tfrac12\bigl(x-\tfrac12\bigr)\ln(1+v^2)\\
+&-xv\arctan v-x+\tfrac12\ln(2\pi)+\re\mu(z).
+\end{align*}
+Subtract the same formula at $y=0$, which is $\ln\Gamma(x)$: the difference is $-x\,g(v)-\frac14\ln(1+v^2)+\re\mu(z)-\mu(x)$, and $|\re\mu(z)-\mu(x)|<1/(6x)$. For $g$: $g(0)=0$, $g'(v)=\arctan v$ and $g''(v)=1/(1+v^2)\in(0,1]$, so $0\le g\le v^2/2$. For $v\ne0$, $|v|\arctan|v|=\frac\pi2|v|-|v|\arctan(1/|v|)$ and $0\le|v|\arctan(1/|v|)\le1$; since $g$ is even, this gives the two-sided bound.
+\end{proof}
+
+Consequences used below:
+\begin{itemize}
+\item (G1) For fixed real $a$: $1/|\Gamma(a+iy)|\le C_a(1+|y|)^{1/2-a}e^{\pi|y|/2}$ for all real $y$, and $|\Gamma(a+iy)|\le C_a(1+|y|)^{a-1/2}e^{-\pi|y|/2}$ for $|y|\ge1$. For $a>0$ this follows from Lemma G and the bounds on $g$; for $a\le0$, shift by $\Gamma(w)=\Gamma(w+J)/\bigl(w(w+1)\cdots(w+J-1)\bigr)$, which multiplies by a factor of size $(1+|y|)^{-J}$ or $(1+|y|)^{J}$.
+\item (G2) For real $q$ and all $X\ge2$ with $X+q\ge1$, $\Gamma(X)/\Gamma(X+q)\le C_qX^{-q}$. For $X\ge2|q|+2$ this follows from Binet's formula and $\ln(1+q/X)=q/X+O(q^2/X^2)$; on the remaining bounded range of $X$ both sides are continuous and positive.
+\item (G3) For $x>0$, $|\Gamma(x+iy)|\le\Gamma(x)$ (the Euler integral).
+\item (G4) If $\dist(w,\mathbb{Z})\ge\delta$ with $0<\delta\le\frac12$, then $|\sin\pi w|\ge c_\delta e^{\pi|\im w|}$ with $c_\delta>0$. For $|\im w|\ge1$, $|\sin\pi w|\ge\sinh(\pi|\im w|)$; on the rest, a compact set modulo translation by $1$, the function $|\sin\pi w|e^{-\pi|\im w|}$ is continuous and nonzero.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Lemma G$'$} (uniform Gamma ratios, first and second order). For real $z\ge8$ and complex $\alpha,\beta$ with $|\alpha|,|\beta|\le2z^{1/3}$,
+\[
+\frac{\Gamma(z+\alpha)}{\Gamma(z+\beta)}=z^{\alpha-\beta}\Bigl(1+\frac{(\alpha-\beta)(\alpha+\beta-1)}{2z}+\mathcal{E}\Bigr),\quad|\mathcal{E}|\le C\,\frac{(1+|\alpha|+|\beta|)^4}{z^2}.
+\]
+
+\begin{proof}
+Use Binet's formula for both, with $\ln(z+\alpha)=\ln z+\alpha/z-\alpha^2/(2z^2)+O(|\alpha|^3/z^3)$ (for $z\ge8$, $|\alpha/z|\le2z^{-2/3}\le\frac12$, so the Taylor remainder is uniform, and $\re(z+\alpha)\ge z-2z^{1/3}\ge z/2$, so the $O(1/(\re w)^3)$ terms below are $O(1/z^3)$):
+\[
+\bigl(z+\alpha-\tfrac12\bigr)\ln(z+\alpha)-(z+\alpha)=\bigl(z+\alpha-\tfrac12\bigr)\ln z-z+\frac{\alpha^2-\alpha}{2z}+O\Bigl(\frac{(1+|\alpha|)^3}{z^2}\Bigr),
+\]
+the same for $\beta$, and $\mu(z+\alpha)-\mu(z+\beta)=O\bigl((1+|\alpha|+|\beta|)/z^2\bigr)$ because $\mu(w)=1/(12w)+O\bigl(1/(\re w)^3\bigr)$ (since $|f(t)-1/12|\le Ct^2$). The difference of the logarithms is
+\[
+(\alpha-\beta)\ln z+\frac{(\alpha-\beta)(\alpha+\beta-1)}{2z}+O\Bigl(\frac{(1+|\alpha|+|\beta|)^3}{z^2}\Bigr),
+\]
+whose non-logarithmic part is $O(z^{-1/3})$; exponentiate with $e^w=1+w+O(|w|^2)$.
+\end{proof}
+
+\subsection{Growth in vertical strips, and the residues on a row}
+
+\noindent\textbf{Lemma S} (polynomial growth of $\Phi$ in vertical strips). Let $J\ge1$ be an integer. For $\re s>p-J$,
+\[
+\Phi(s)=\sum_{m=0}^{2}c_m\sum_{j=0}^{J-1}\binom{s+j-1}{j}\rho_{j+m}(s)+\sum_{m=0}^{2}c_m\sum_{N\ge1}\xi^{N(s+m-p)}r_J(s,\xi^N),
+\]
+where
+\[
+r_J(s,x)=J\binom{s+J-1}{J}x^J\int_0^1(1-v)^{J-1}(1-xv)^{-s-J}\,dv,
+\]
+the second double series converging absolutely and locally uniformly there. Consequently, for $p-J<\sigma_1\le\sigma_2$ and $\delta>0$ there is $C$ such that $|\Phi(\sigma+it)|\le C(1+|t|)^J$ whenever $\sigma_1\le\sigma\le\sigma_2$ and $\dist(\sigma+it,\mathcal{P})\ge\delta$; and the same bound holds on every horizontal line $\im s=\pm\frac{2\pi}{L}\bigl(\kappa+\frac12\bigr)$, $\kappa\ge0$ an integer, with no distance condition.
+
+\begin{proof}
+For $\re s>p$, $a_Nb_N^{-s}=\sum_mc_m\xi^{N(s+m-p)}(1-\xi^N)^{-s}$. Taylor's formula with integral remainder for $(1-x)^{-s}$, whose $J$-th derivative is $(s)_J(1-x)^{-s-J}$ with $(s)_J=s(s+1)\cdots(s+J-1)=J!\binom{s+J-1}{J}$, gives
+\[
+(1-x)^{-s}=\sum_{j<J}\binom{s+j-1}{j}x^j+r_J(s,x)\qquad(0<x<1).
+\]
+Summing over $N$, $\sum_N\xi^{N(s+m-p+j)}=\rho_{j+m}(s)$. For $0<x\le\xi$ and $v\in[0,1]$, $1-xv$ is real and positive, so $|(1-xv)^{-s-J}|=(1-xv)^{-\sigma-J}\le\max\bigl(1,(1-\xi)^{-\sigma-J}\bigr)$, and $|r_J(s,x)|\le|\binom{s+J-1}{J}|\,x^J\max\bigl(1,(1-\xi)^{-\sigma-J}\bigr)$. Hence
+\[
+\bigl|\xi^{N(s+m-p)}r_J(s,\xi^N)\bigr|\le\Bigl|\binom{s+J-1}{J}\Bigr|\max\bigl(1,(1-\xi)^{-\sigma-J}\bigr)\,\xi^{N(\sigma+m-p+J)},
+\]
+which is summable for $\sigma>p-m-J$, locally uniformly. The right side is meromorphic for $\re s>p-J$ and equals $\Phi$ for $\re s>p$, so by uniqueness of continuation it equals $\Phi$ on $\re s>p-J$. For the bound: $|\binom{s+j-1}{j}|\le C(1+|t|)^j$ uniformly for $\sigma\in[\sigma_1,\sigma_2]$; each $\rho_n$ is $2\pi/L$-periodic in $t$ and bounded at distance $\delta$ from its poles; and on the lines $\im s=\pm\frac{2\pi}{L}\bigl(\kappa+\frac12\bigr)$, $e^{L(n+s-p)}$ is a negative real number, so $|\rho_n(s)|\le1$ for every $n$.
+\end{proof}
+
+\noindent\textbf{Lemma R} (the residues on a ripple row). For $n\ge0$ and $k\in\mathbb{Z}$, provided $s_{n,k}$ is not a pole of $H$ (that is, unless $p$ is an integer, $k=0$ and either $n\ge p$ or $n\le p-3$; the second case is empty for $p<3$),
+\begin{equation*}
+H(s_{n,k})\,Q_n(s_{n,k})=\frac12\,\Gamma(3-p+n+i\tau_k)\sum_{m=0}^{\min(2,n)}c_m\frac{\Gamma(p-m-i\tau_k)}{(n-m)!}. \tag{R}
+\end{equation*}
+Consequently, for $p<3$ there is $C$ such that, for $n\ge1$ and every $k$ allowed above,
+\[
+|H(s_{n,k})\,Q_n(s_{n,k})|\le C\,n^{4-p}(1+|\tau_k|)^{|p|+1}e^{-\pi|\tau_k|/2},
+\]
+and the row
+\[
+\row_n(u)=\frac1L\sum_kH(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}},
+\]
+with the sum over the $k$ allowed above, satisfies $|\row_n(u)|\le C'n^{4-p}u^{n-p}$ for $u>0$.
+
+\begin{proof}
+At $s=s_{n,k}$ the top of $\binom{s+n-m-1}{n-m}$ is $z=p-m-1-i\tau_k$, and $z+1-(n-m)=s$, so $\binom{s+n-m-1}{n-m}=\Gamma(p-m-i\tau_k)/\bigl((n-m)!\,\Gamma(s)\bigr)$, when $p-m-i\tau_k$ is not a pole of $\Gamma$. (At integer $p$, $k=0$ and $m\ge p$ that factor is a pole; this is the meeting case, which is excluded, or, for $m>n$, absent.) Multiply by $H(s)=\Gamma(s)\Gamma(3-s)/2$: the $\Gamma(s)$ cancels, so no sine is left, and $3-s=3-p+n+i\tau_k$. For the bound: $3-p+n>0$, so $|\Gamma(3-p+n+i\tau)|\le\Gamma(3-p+n)$ by (G3), and $\Gamma(3-p+n)/(n-m)!\le Cn^{2+m-p}$ by (G2) with $X=3-p+n\ge2$, that is for $n\ge p-1$, the finitely many $n\ge1$ below $p-1$ (only $n=1$, only for $2<p<3$) giving finite values absorbed in $C$; $|\Gamma(p-m-i\tau)|\le C(1+|\tau|)^{p-m-1/2}e^{-\pi|\tau|/2}$ for $|\tau|\ge2\pi/L$ by (G1), where for the finitely many $k\ne0$ with $|\tau_k|<1$, which occur only when $L>2\pi$, the constant absorbs the values; and the factor is finite at $\tau=0$ in the allowed cases. Sum over $k$: $\sum_k(1+|\tau_k|)^{|p|+1}e^{-\pi|\tau_k|/2}<\infty$, and $|u^{-s_{n,k}}|=u^{n-p}$.
+\end{proof}
+
+Claim 5.5 of [D] bounds the same quantity through the sine form of $H$; (R) removes the sines exactly and gives the same order $n^{4-p}$.
+
+\subsection{The growth of Phi far to the left}
+
+\noindent\textbf{Theorem P3.} Fix $0<\xi<1$, real $p$ and $0<\delta\le\frac12$. Put
+\[
+\sigma_0=\min(-1,p-4),\qquad A=\max\bigl(3-p,\tfrac12\bigr),\qquad B=\max\bigl(p-\tfrac12,0\bigr).
+\]
+There is $C=C(\xi,p,\delta)$ such that for every $s=\sigma+it$ with $\sigma\le\sigma_0$ and $\dist(s,\mathcal{P})\ge\delta$,
+\[
+|\Phi(\sigma+it)|\le C(1+|\sigma|)^A(1+|t|)^Be^{\pi|t|/2}.
+\]
+
+The bound is not sharp. On the real axis $\Phi(-l)$ has size $l^{2-p}$ times a log-periodic factor (the asymptotics of Claim 5.4 of [D]), and the measured growth rate in $t$ stays below $\pi/2$ at every point tested (Section~\ref{sec:num}). What a contour shift needs is only this: polynomial growth in $|\sigma|$, and growth below $e^{\pi|t|}$ in $t$. For comparison, Murahara and Onozuka \cite[Theorem~1.1 and Corollary~1.2]{MO} bound the two-variable function of [KKW], which they write $\zeta_q(s,t)$ and which is written $f_q(s,w)$ here ($t$ being $\im s$ in this note), on vertical lines $s=\sigma+iv$ for $|v|$ large, with $\sigma$ and $\re w$ fixed and $w$ kept away from the poles ($\inf_{r\ge0}|1-q^{w+r}|>\varepsilon$), the constants depending on $\varepsilon$, $q=\xi$, $\sigma$ and $\re w$: $O(1)$ for $\re w>0$, $O(|v|)$ at $\re w=0$ and $O\bigl(e^{-\re w\,(1+\pi/2)|v|}\bigr)$ for $\re w<0$. For their one-variable $\zeta_q(s)=f_q(s,s-1)$ this reads $O(1)$ for $\sigma>1$, $O(|v|)$ at $\sigma=1$ and $O\bigl(e^{(1-\sigma)(1+\pi/2)|v|}\bigr)$ for $\sigma<1$, a rate that grows as $\sigma$ moves left; the three terms of $\Phi$ in Section~\ref{sec:lineage} are $f_\xi(s,s-q_m)$, with $\re w=\sigma-q_m$. Theorem P3 bounds $\Phi$ for every $t$, with the rate $\pi/2$ in $|t|$ uniformly for $\sigma\le\sigma_0$ and a power of $1+|\sigma|$; it is checked by an AI instrument and read by no mathematician.
+
+\begin{proof}
+By Lemma L, $|\Phi(s)|\le\frac1L\sum_mc_m\sum_k|T_{m,k}(s)|$ with
+\[
+T_{m,k}(s)=\frac{\Gamma(1-s)\,\Gamma(s-a)}{\Gamma(1-a)},\qquad a=a_{m,k}=q_m-i\tau_k.
+\]
+
+\emph{Step 1 (rewrite).} $s-a$ is not an integer (Step 2), so by reflection $\Gamma(s-a)=\pi/\bigl(\sin\pi(s-a)\,\Gamma(1-s+a)\bigr)$ and
+\[
+|T_{m,k}(s)|=\frac{\pi\,|\Gamma(1-s)|}{|\sin\pi(s-a)|\,|\Gamma(1-s+a)|\,|\Gamma(1-a)|}.
+\]
+Put $X=1-\sigma$, $q=q_m$, $Y=X+q$ and $y=y_k=t+\tau_k$. Then $1-s=X-it$, $1-s+a=Y-iy$ and $\im(s-a)=y$. Since $\sigma\le\sigma_0=\min(-1,p-4)$ and $q\ge p-2$, we have $X\ge2$, $Y\ge3$, and $X\ge5-p$.
+
+\emph{Step 2 (the distance condition).} A point $a+N'$ ($N'\in\mathbb{Z}$) within distance $\frac12$ of $s$ has real part $q+N'\le\sigma+\frac12\le\min\bigl(-\frac12,p-\frac72\bigr)$, which is less than $p-2\le q$. So $N'\le-1$, and $a+N'=p-(m-N')-i\tau_k$ with $m-N'\ge1$ is a point of $\mathcal{P}$. Hence $\dist(s-a,\mathbb{Z})=\dist(s,a+\mathbb{Z})\ge\min\bigl(\frac12,\dist(s,\mathcal{P})\bigr)\ge\delta$, and by (G4) $1/|\sin\pi(s-a)|\le c_\delta^{-1}e^{-\pi|y|}$.
+
+\emph{Step 3 (the Gamma factors).} Lemma G gives $|\Gamma(X-it)|\le\Gamma(X)e^{1/(6X)}$ (drop the factor $e^{-Xg(t/X)}(1+t^2/X^2)^{-1/4}\le1$) and
+\[
+\frac{1}{|\Gamma(Y-iy)|}\le\frac{e^{1/(6Y)}}{\Gamma(Y)}\,e^{Y g(y/Y)}\bigl(1+y^2/Y^2\bigr)^{1/4};
+\]
+(G1) gives $1/|\Gamma(1-a)|=1/|\Gamma(1-q+i\tau_k)|\le C_q(1+|\tau_k|)^{q-1/2}e^{\pi|\tau_k|/2}$; and (G2) gives $\Gamma(X)/\Gamma(Y)\le C_qX^{-q}$. With $q_+=\max\bigl(q-\frac12,0\bigr)$ and $|\tau_k|\le|t|+|y|$,
+\begin{align*}
+|T_{m,k}(s)|\le{}&C X^{-q}(1+|t|)^{q_+}(1+|y|)^{q_+}\bigl(1+y^2/Y^2\bigr)^{1/4}\\
+&\times\exp\Bigl(\frac\pi2\bigl(|t|+|y|\bigr)-\pi|y|+Y\,g(y/Y)\Bigr).
+\end{align*}
+
+\emph{Step 4 (two cases).} Case (i), $|y|\le Y$: then $Y\,g(y/Y)\le y^2/(2Y)\le|y|/2$, the exponent is at most $\frac\pi2|t|-\frac{\pi-1}{2}|y|$, and $(1+y^2/Y^2)^{1/4}\le2^{1/4}$. Case (ii), $|y|>Y$: then $Y\,g(y/Y)\le\frac\pi2|y|-\frac Y2\ln(1+y^2/Y^2)$, the exponent is at most $\frac\pi2|t|$, and the remaining factor is $(1+y^2/Y^2)^{1/4-Y/2}\le(|y|/Y)^{1/2-Y}$; also $(1+|y|)^{q_+}\le2^{q_+}Y^{q_+}(|y|/Y)^{q_+}$.
+
+\emph{Step 5 (the sum over $k$).} The points $y_k=t+\tau_k$ form an arithmetic progression of step $2\pi/L$, so each interval $[2\pi j/L,2\pi(j+1)/L)$ contains at most two of the $|y_k|$. Case (i) contributes at most $CX^{-q}(1+|t|)^{q_+}e^{\pi|t|/2}C_1$, with
+\[
+C_1=2\sum_{j\ge0}\Bigl(1+\frac{2\pi(j+1)}{L}\Bigr)^{q_+}e^{-(\pi-1)\pi j/L},
+\]
+independent of $t$ and $\sigma$. Case (ii) contributes at most
+\[
+CX^{-q}(1+|t|)^{q_+}e^{\pi|t|/2}\,2^{q_+}Y^{q_+}\sum_{|y_k|>Y}\bigl(|y_k|/Y\bigr)^{-\beta},
+\]
+with $\beta=Y-\frac12-q_+\ge2$ (since $Y\ge3$ and $Y-q_+=X+\min\bigl(q,\frac12\bigr)\ge\frac52$); the sum is at most $2\bigl(1+LY/(2\pi(\beta-1))\bigr)\le2+LY/\pi$. Since $q_m\le p$ and $X\ge2$, $Y=X+q_m\le X+\max(p,0)\le\bigl(1+\tfrac12\max(p,0)\bigr)X$, and so
+\[
+\sum_k|T_{m,k}(s)|\le C X^{-q_m}X^{(q_m)_++1}(1+|t|)^{(q_m)_+}e^{\pi|t|/2}.
+\]
+
+\emph{Step 6 (exponents).} The exponent $-q+q_++1$ equals $\frac12$ when $q\ge\frac12$ and $1-q$ when $q<\frac12$; over $q\in\{p,p-1,p-2\}$ the largest is $\max\bigl(\frac12,3-p\bigr)=A$, and the largest $q_+$ is $\max\bigl(p-\frac12,0\bigr)=B$. Since $X=1+|\sigma|$, the bound follows.
+\end{proof}
+
+\noindent\textbf{Corollary P3$'$} (the values on the negative axis). For $p$ not an integer and $l\ge\max(1,4-p)$, $|\Phi(-l)|\le Cl^A$: take $t=0$ and $\delta=\min\bigl(\frac12,\dist(p,\mathbb{Z})\bigr)$, which is allowed because the real parts of $\mathcal{P}$ are the numbers $p-n$. For an integer $p$ and the same $l$, the same proof applied to the $k\ne0$ part of (L) at $s=-l$, where $|\im(s-a_{m,k})|=|\tau_k|\ge2\pi/L$ gives the sine bound with $\delta=\min\bigl(\frac12,2\pi/L\bigr)$, shows $\sum_mc_m\sum_{k\ne0}|T_{m,k}(-l)|\le Cl^A$.
+
+\section{Piece 1: the expansion for small u, at every p below 3}\label{sec:P1}
+
+\subsection{The one-piece contour shift, valid for every u}
+
+\noindent\textbf{Proposition 4.1.} Let $p<3$, $u>0$ and $\max(0,p)<c<3$, and let $\sigma_K$ be admissible with $\sigma_K\le\sigma_0$. Then
+\[
+\Psi(u)=S_K(u)+R_K(u),
+\]
+where $S_K(u)$ is the sum of $\Res_\zeta\bigl[H(s)\Phi(s)u^{-s}\bigr]$ over the poles $\zeta$ with $\sigma_K<\re\zeta<c$, and
+\[
+R_K(u)=\frac{1}{2\pi i}\int_{\re s=\sigma_K}H(s)\,\Phi(s)\,u^{-s}\,ds.
+\]
+The residue sum, which is infinite (every $k$ enters), converges absolutely, and $|R_K(u)|\le C(K+3)^{A+2}u^{-\sigma_K}$ with $C=C(\xi,p,c)$ independent of $K$ and $u$. In particular $R_K(u)\to0$ as $K\to\infty$ for every $0<u<1$.
+
+\begin{proof}
+Start from (MB) on $\re s=c$ (Claim 2.3 of [D]). Integrate $H\Phi u^{-s}$ over the rectangle with vertical sides $\re s=c$ and $\re s=\sigma_K$ and horizontal sides $\im s=\pm T_\kappa$, $T_\kappa=\frac{2\pi}{L}\bigl(\kappa+\frac12\bigr)$. No pole lies on the boundary: on $\re s=c$, $\Phi$ is holomorphic ($c>p$) and so is $H$ ($0<c<3$); on $\re s=\sigma_K$ both are, since $\sigma_K$ has distance at least $1/8$ from $\mathbb{Z}$ and from $p+\mathbb{Z}$; on the horizontal sides $H$ is holomorphic (its poles are real) and so is $\Phi$ ($|\rho_n|\le1$ there, Lemma S).
+\begin{itemize}
+\item \emph{Horizontal sides.} For $\sigma\in[\sigma_K,c]$, $|H(\sigma\pm iT)|\le\pi(|1-\sigma|+T+2)^2/\bigl(2\sinh\pi T\bigr)$, from $H=\pi(1-s)(2-s)/(2\sin\pi s)$ and $|\sin\pi s|\ge\sinh(\pi|\im s|)$. Lemma S with $J=\lceil p-\sigma_K\rceil+1$ gives $|\Phi(\sigma\pm iT_\kappa)|\le C_K(1+T_\kappa)^J$, and $|u^{-s}|=u^{-\sigma}$. The two integrals are $O_K\bigl((1+T_\kappa)^{J+2}e^{-\pi T_\kappa}\bigr)$, which tends to $0$ as $\kappa\to\infty$.
+\item \emph{Inside.} For each $\kappa$ there are finitely many poles. As $\kappa\to\infty$ the residues over $|\im\zeta|<T_\kappa$ converge to the full sum, absolutely, because the $k$-sums converge absolutely (Lemma R for the rows with $n\ge1$; for the row $n=0$, which lies in the strip since $\sigma_K<p<c$, by (R) with $Q_0=1$, $|H(s_{0,k})|=\frac12|\Gamma(3-p+i\tau_k)\,\Gamma(p-i\tau_k)|\le C(1+|\tau_k|)^{p-1/2}e^{-\pi|\tau_k|/2}$ by (G3) and (G1), summable over $k$; the poles of $H$ are real and finite in number in the strip).
+\item \emph{Left side.} On $\re s=\sigma_K$, $|\sin\pi s|\ge c_{1/8}e^{\pi|t|}$ by (G4), so $|H(\sigma_K+it)|\le C(K+3+|t|)^2e^{-\pi|t|}$. Also $\dist(s,\mathcal{P})\ge1/8$, because the real parts of $\mathcal{P}$ are the numbers $p-n$, so Theorem P3 gives $|\Phi(\sigma_K+it)|\le C(K+2)^A(1+|t|)^Be^{\pi|t|/2}$. The integrand is at most $C(K+3)^{A+2}(1+|t|)^{B+2}e^{-\pi|t|/2}u^{-\sigma_K}$, which is integrable in $t$; this gives the bound on $R_K$ and, with the right side, the identity. The rectangle is traversed counterclockwise, so the residues enter with a plus sign.
+\end{itemize}
+\end{proof}
+
+The identity holds for every $u>0$; only the decay of $R_K$ needs $u<1$. Section~\ref{sec:P2} uses the same identity for $u\ge1$.
+
+\subsection{The residues}
+
+\noindent\textbf{Lemma 4.2.} The residues of $H(s)\Phi(s)u^{-s}$ in the strip $\sigma_K<\re s<c$ are of three kinds.
+
+(a) At $s=-l$ where $\Phi$ is regular ($p$ not an integer, or $p$ an integer and $l+p<0$): $R_l\,\Phi(-l)\,u^l$.
+
+(b) At $s=s_{n,k}$ where $H$ is regular ($k\ne0$; or $k=0$ and $p-n\notin\{0,-1,-2,\dots\}$): $H(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}}/L$, which is zero when $Q_n(s_{n,k})=0$. At an integer $p$ with $1\le p\le2$ (recall $p<3$) this includes the $k=0$ points $s=p-n$ with $0\le n<p$; they lie in $\{1,2\}$, where $H$ is regular, with $H(1)=H(2)=\frac12$.
+
+(c) At $s=-l$ with $p$ an integer and $n=l+p\ge0$: $H(s)\Phi(s)u^{-s}$ has at most a double pole there, and its residue is
+\[
+\bigl(F_l+G_l\ln(1/u)\bigr)u^l,
+\]
+where $G_l$ and $F_l$ are the coefficients of $(s+l)^{-2}$ and $(s+l)^{-1}$ in the Laurent expansion of $H(s)\Phi(s)$ at $s=-l$. They depend on $\xi$, $p$ and $l$ only, and in closed form
+\[
+G_l=\frac{R_l\,Q_n(-l)}{L},\qquad F_l=R_l\Bigl[\Phi^0_l-\Bigl(\frac1{l+1}+\frac1{l+2}\Bigr)\frac{Q_n(-l)}{L}\Bigr],
+\]
+where $\Phi^0_l$, the finite part of $\Phi$ at $-l$, is
+\[
+\Phi^0_l=\frac{Q_n'(-l)}{L}-\frac{Q_n(-l)}{2}+\sum_{j=0}^{l}(-1)^j\binom{l}{j}\sum_{\substack{0\le m\le2\\ j+m-l\ne p}}c_m\,g_{j+m-l}.
+\]
+Section~\ref{sec:coeff} gives $Q_n(-l)$ and $Q_n'(-l)$ in closed form.
+
+\begin{proof}
+(a), (b): a simple pole of one factor times the value of the other; the residue of $\Phi$ at $s_{n,k}$ is $Q_n(s_{n,k})/L$ (Claim 3.1). (c): near $s=-l$ put $\varepsilon=s+l$. $H$ has a simple pole at $-l$ with residue $R_l$. In $\Phi=\sum_{n'}Q_{n'}\rho_{n'}$ only the term with $n'=n=l+p$ is singular at $-l$: since $n+s-p=\varepsilon$, $\rho_n=1/(e^{L\varepsilon}-1)$ has a simple pole there with residue $1/L$, while every other term is regular at $-l$ and the series of the other terms converges uniformly near $-l$ (as in Claim 3.1). So $\Phi$ has at most a simple pole at $-l$, $H\Phi$ has at most a double pole, and $H(s)\Phi(s)=G_l\varepsilon^{-2}+F_l\varepsilon^{-1}+O(1)$. For the closed forms: $H=R_l\varepsilon^{-1}+H^0_l+O(\varepsilon)$ (Section~\ref{sec:notation}); $\rho_n=(L\varepsilon)^{-1}-\frac12+O(\varepsilon)$ and $Q_n(s)=Q_n(-l)+Q_n'(-l)\varepsilon+O(\varepsilon^2)$, so $Q_n\rho_n=Q_n(-l)/(L\varepsilon)+Q_n'(-l)/L-Q_n(-l)/2+O(\varepsilon)$. Every other term has the value $Q_{n'}(-l)\,g_{n'-l}$ at $-l$, and by the reflection $\binom{-l+j-1}{j}=(-1)^j\binom{l}{j}$, $Q_{n'}(-l)=\sum_mc_m(-1)^{n'-m}\binom{l}{n'-m}$, which is $0$ for $n'>l+2$. Reindexing by $j=n'-m$ gives the finite sum in $\Phi^0_l$, the pairs with $j+m=n$ belonging to the term already counted. So $\Phi=Q_n(-l)/(L\varepsilon)+\Phi^0_l+O(\varepsilon)$, and the product gives $G_l=R_lQ_n(-l)/L$ and $F_l=R_l\Phi^0_l+H^0_lQ_n(-l)/L$, which is the stated $F_l$. With $u^{-s}=u^le^{\varepsilon\ln(1/u)}=u^l\bigl(1+\varepsilon\ln(1/u)+O(\varepsilon^2)\bigr)$, the coefficient of $\varepsilon^{-1}$ in $H\Phi u^{-s}$ is $u^l\bigl(F_l+G_l\ln(1/u)\bigr)$.
+\end{proof}
+
+Claim 6.1 of [D] writes the same residue as $F_lu^l-G_lu^l\ln u$; it is the same term.
+
+\subsection{The coefficients at integer p, and their growth}\label{sec:coeff}
+
+\noindent\textbf{The coefficients $F_l$ and $G_l$ in closed form.} Let $p\le2$ be an integer, $l\ge\max(0,-p)$ and $n=l+p$. Lemma 4.2~(c) gives $F_l$ and $G_l$ through $Q_n(-l)$, $Q_n'(-l)$ and the finite part $\Phi^0_l$. With the convention $\binom{l}{j}=0$ for $j<0$ or $j>l$,
+\begin{align*}
+Q_n(-l)&=\sum_{m=\max(0,p)}^{2}c_m(-1)^{l+p-m}\binom{l}{m-p},\\
+Q_n'(-l)&=\sum_{m=0}^{\min(2,p-1)}c_m\,(-1)^l\,\frac{(p-m-1)!\;l!}{(l+p-m)!}\\
+&\quad-\sum_{m=\max(0,p)}^{2}c_m(-1)^{l+p-m}\binom{l}{m-p}\bigl(\Har_l-\Har_{m-p}\bigr).
+\end{align*}
+\emph{Derivation.} The $m$-th term of $Q_n$ at $s=-l$ is $c_m\binom{z}{j}$ at $z=a=p-m-1$, with $j=l+p-m$, so that $j-a-1=l$; the term is absent when $j<0$. The derivative of $\binom{z}{j}$ is $\binom{z}{j}\sum_{i<j}(z-i)^{-1}$ where no factor vanishes. If $a\ge0$, the binomial is $0$ (the bottom exceeds the top), exactly one factor $z-a$ vanishes at $z=a$, and the product of the others is $a!\,(-1)^{j-1-a}(j-1-a)!=a!\,(-1)^l\,l!$; divided by $j!$, this gives the first sum of $Q_n'$. If $a<0$, no factor vanishes, $\binom{a}{j}=(-1)^j\binom{l}{j}=(-1)^{l+p-m}\binom{l}{m-p}$ by the reflection, and $\sum_{i<j}(a-i)^{-1}=-\bigl(\frac{1}{m-p+1}+\dots+\frac1l\bigr)=-(\Har_l-\Har_{m-p})$. The closed form of $Q_n(-l)$ is (V) of Section~\ref{sec:chain}, written in $m$.
+
+So $F_l$ and $G_l$ are finite expressions in $1/L$, the geometric sums $g_j$, harmonic numbers and binomial coefficients. At $p=0,1,2$:
+\begin{itemize}
+\item $p=2$: $Q_{l+2}(-l)=(-1)^l$, $G_l=\binom{l+2}{2}/L$, and $F_0=\tfrac3L-\tfrac12-\tfrac{1}{1-\xi^2}-\tfrac{4}{1-\xi}$.
+\item $p=1$: $Q_{l+1}(-l)=(-1)^l(4-l)$, $G_l=\binom{l+2}{2}(4-l)/L$ (no $u^4\ln(1/u)$ term), $Q_{l+1}'(-l)=(-1)^l\bigl[\frac{1}{l+1}-4\Har_l+l(\Har_l-1)\bigr]$ for $l\ge1$, $Q_1'(0)=1$, and $F_0=-3-\tfrac5L$ (Claim 6.3 of [D]).
+\item $p=0$: $Q_l(-l)=(-1)^l(l^2-9l+2)/2$, $G_l=\binom{l+2}{2}(l^2-9l+2)/(2L)$, and $F_0=-\tfrac12+\tfrac{4\xi}{1-\xi}+\tfrac{\xi^2}{1-\xi^2}-\tfrac{3}{2L}$.
+\item The unmet poles of Lemma 4.2~(b) at an integer $p\ge1$: $H(1)=H(2)=\frac12$ and $Q_n(p-n)=\sum_{m\le\min(2,n)}c_m\binom{p-m-1}{n-m}$, so the third sum of Theorem P1~(ii) is $u^{-1}/(2L)$ at $p=1$ and $(u^{-2}+5u^{-1})/(2L)$ at $p=2$ ($Q_0=1$, $Q_1(1)=5$).
+\end{itemize}
+
+\noindent\textbf{A second closed form of $\Phi^0_l$} ($l\ge1$), from Lemma L. Separate the $k=0$ terms of (L) at $s=-l$. For the $m$ with $1-q_m\le0$ they vanish identically, since $1/\Gamma$ vanishes there. For the others ($m\ge p$), the term $\Gamma(1-s)\Gamma(s-q_m)/\Gamma(1-q_m)$ has at $s=-l$ either a simple pole, when $l+p-m\ge0$, whose finite part is $(-1)^{l+p-m}\binom{l}{m-p}\bigl(\Har_{l+p-m}-\Har_l\bigr)$ (its polar parts add up to $Q_n(-l)/(L\varepsilon)$), or, when $m-p>l$, the value $l!\,(m-p-l-1)!/(m-p)!$. The terms with $k\ne0$ are regular at $-l$, and by the identity used for Claim 5.4 of [D] above,
+\begin{align*}
+\Phi^0_l={}&\frac1L\sum_{\substack{m\ge p\\ m-p\le l}}c_m(-1)^{l+p-m}\binom{l}{m-p}\bigl(\Har_{l+p-m}-\Har_l\bigr)\\
+&+\frac1L\sum_{m-p>l}c_m\,\frac{l!\,(m-p-l-1)!}{(m-p)!}\\
+&+\frac{(-1)^{l+1}\,l!}{L}\sum_{m=0}^{2}c_m\sum_{k\ne0}\frac{\Gamma(q_m-i\tau_k)}{\Gamma(l+1+q_m-i\tau_k)}.
+\end{align*}
+This form has no cancellation; its first two sums are $O\bigl(l^{2-p}(1+\ln l)\bigr)$, and its last is $O(l^A)$ by Corollary P3$'$, which gives a second route to the bound on $F_l$ in Lemma 4.3~(b).
+
+The independent check verified them in two ways. The closed forms of $Q_n(-l)$ and $Q_n'(-l)$ that enter them were compared in exact rational arithmetic with a dual-number evaluation of the definition of $Q_n$, at every pair $(p,l)$ with $p\in\{-2,-1,0,1,2\}$ and $\max(0,-p)\le l\le60$: 302 of 302 equal. And $(F_l,G_l)$ were compared with the Laurent coefficients of $H\Phi$ read off a circle around the double pole, an independent route, at the three blind integer cases of Section~\ref{sec:num} and $0\le l\le5$, at 40 working digits: the worst relative difference for $F_l$ was $1.0\times10^{-38}$, and $G_l$ agreed to the same precision, in absolute terms where a coefficient is too small for a relative figure. The same check re-derived by hand the values at $p=0,1,2$, the unmet-pole terms and the second form of $\Phi^0_l$. For this version every formula of this subsection was checked once more by a separate script (Section~\ref{sec:r5check}).
+
+\medskip
+\noindent\textbf{Lemma 4.3} (growth of the coefficients). Let $l\ge1$ and $n\ge1$. (a) For $p$ not an integer, $|\Phi(-l)|\le Cl^A$. (b) For $p$ an integer, $|F_l|\le Cl^{A+2}$ and $|G_l|\le Cl^{A+2}$. (c) For every $p<3$, $|\row_n(u)|\le Cn^{4-p}u^{n-p}$, and the same holds for the row without its $k=0$ term.
+
+\begin{proof}
+(a) is Corollary P3$'$ for $l\ge\max(1,4-p)$; the finitely many $l$ with $1\le l<4-p$ are finite numbers, since $-l\notin\mathcal{P}$ when $p$ is not an integer, and are absorbed in $C$. (c) is Lemma R. (b): $F_l$ and $G_l$ are the Laurent coefficients of $H\Phi$ at $-l$ (Lemma 4.2~(c)). Put $\delta=\min(\frac14,\pi/L)$. The disc $|s+l|\le\delta$ contains no singularity of $H\Phi$ other than $-l$: the poles of $H$ are integers, and the points $-l-i\tau_k$ of $\mathcal{P}$ with $k\ne0$ are at distance $|\tau_k|\ge2\pi/L>\delta$ from $-l$. So by Cauchy's formula,
+\[
+F_l=\frac{1}{2\pi i}\oint_{|s+l|=\delta}H(s)\Phi(s)\,ds,\qquad G_l=\frac{1}{2\pi i}\oint_{|s+l|=\delta}(s+l)\,H(s)\Phi(s)\,ds,
+\]
+and $|F_l|\le\delta M_l$, $|G_l|\le\delta^2M_l$, where $M_l$ is the maximum of $|H\Phi|$ on the circle. On the circle $\dist(s,\mathcal{P})\ge\delta$: the points of $\mathcal{P}$ with real part $-l$ are $-l-i\tau_k$, at distance exactly $\delta$ for $k=0$ and at least $|\tau_k|-\delta\ge2\pi/L-\delta\ge\delta$ for $k\ne0$, and the other real parts of $\mathcal{P}$ are integers, at distance at least $1-\delta$. For $l\ge\max(2,5-p)$ the circle lies in $\re s\le\sigma_0$, so Theorem P3 with this $\delta$ gives $|\Phi(s)|\le C(l+2)^A(1+\delta)^Be^{\pi\delta/2}\le Cl^A$ there. For $H$: on the circle $|\sin\pi s|=|\sin\pi(s+l)|\ge\sin\pi\delta$, because $\sin^2\pi\delta-\sin^2\pi x=\sin\pi(\delta-x)\sin\pi(\delta+x)\le\pi^2(\delta^2-x^2)=\pi^2y^2\le\sinh^2\pi y$ for $s+l=x+iy$, and $|(1-s)(2-s)|\le(l+3)^2$, so $|H(s)|\le Cl^2$. Hence $M_l\le Cl^{A+2}$ and $|F_l|,|G_l|\le Cl^{A+2}$; the finitely many $l$ with $1\le l<\max(2,5-p)$ are absorbed in $C$.
+\end{proof}
+
+\subsection{The expansion}
+
+\noindent\textbf{Theorem P1.} Let $0<u<1$.
+
+(i) If $p<3$ is not an integer, C2 holds:
+\[
+\Psi(u)=\sum_{l\ge0}R_l\,\Phi(-l)\,u^l+\frac1L\sum_{n\ge0}\sum_{k\in\mathbb{Z}}H(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}},
+\]
+both series absolutely convergent.
+
+(ii) If $p\le2$ is an integer,
+\begin{align*}
+\Psi(u)={}&\sum_{0\le l<-p}R_l\,\Phi(-l)\,u^l+\sum_{l\ge\max(0,-p)}\bigl(F_l+G_l\ln(1/u)\bigr)u^l\\
+&+\frac1L\sum_{0\le n<p}H(p-n)\,Q_n(p-n)\,u^{n-p}\\
+&+\frac2L\sum_{n\ge0}\sum_{k\ge1}\re\Bigl[H(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}}\Bigr],
+\end{align*}
+with $F_l$ and $G_l$ as in Lemma 4.2~(c), every series absolutely convergent. The first and third sums are finite; the first is empty when $p\ge0$, and the third when $p\le0$.
+
+\begin{proof}
+Proposition 4.1 with $K\to\infty$ gives $\Psi(u)=\lim_KS_K(u)$. By Lemma 4.2, $S_K$ is the sum of the terms of the stated series whose poles lie to the right of $\sigma_K$. For (ii): the $k=0$ rows with $n\ge p$ are exactly the meeting poles of Lemma 4.2~(c); the $k=0$ rows with $n<p$ are the unmet poles at $1$ and $2$ of Lemma 4.2~(b); and the terms with $k\ne0$ come in conjugate pairs, because $\Phi(\bar s)=\overline{\Phi(s)}$, and likewise for $H$, $Q_n$ and $u^{-s}$, all real on the real axis. By Lemma 4.3 each of the stated series converges absolutely for $0<u<1$, since $l^{A+2}u^l\bigl(1+\ln(1/u)\bigr)$ and $n^{4-p}u^{n-p}$ are summable; the terms with $l=0$ or $n=0$, outside the range of Lemma 4.3, are finitely many, each a finite number, since for $n=0$ the $k$-sum $\frac1L\sum_kH(s_{0,k})\,u^{-s_{0,k}}$ converges absolutely by (R) with $Q_0=1$, (G3) and (G1). An absolutely convergent family may be summed in any grouping, so $\lim_KS_K(u)$ is the sum of the stated series.
+\end{proof}
+
+\noindent\textbf{What this adds to [D].} Theorem P1~(ii) is the expansion that [D, item 8.2] left in outline, written out. Theorem P1~(i) re-proves [D, Section~5] on all of $0<u<1$ in one step: [D] proved $0<u<1/2$ by rearranging a double series and reached $1/2\le u<1$ by analytic continuation [D, item 8.4]; here the contour shift reaches every $u<1$ directly, because Theorem P3 controls $\Phi$ on the far-left line. The splitting argument of [D, Sections 5.1 to 5.5] is not needed for this proof and is not contradicted by it.
+
+\subsection{Where the meeting residues vanish}\label{sec:chain}
+
+At an integer $p$ and $l\ge\max(0,-p)$ the pole of $H$ at $-l$ meets the pole of $\Phi$ with $n=p+l$ (Lemma 4.2~(c)). In the notation of the proof of Lemma 4.2~(c), $H=R_l\varepsilon^{-1}+O(1)$, and $\Phi=Q_{p+l}(-l)L^{-1}\varepsilon^{-1}+O(1)$, because $\rho_n=(L\varepsilon)^{-1}+O(1)$ and $Q_n(s)=Q_n(-l)+O(\varepsilon)$. So
+\[
+G_l=\frac{R_l\,Q_{p+l}(-l)}{L},\qquad R_l=(-1)^l\binom{l+2}{2}\ne0,
+\]
+and $G_l=0$ exactly when $Q_{p+l}(-l)=0$. Then $\Phi$ is regular at $-l$, $H\Phi$ has at most a simple pole there, with residue $R_l\Phi(-l)u^l$, and the logarithm is absent from that term of Theorem P1~(ii). The next statement says where this happens.
+
+\medskip
+\noindent\textbf{Proposition 4.4} (the vanishing set). Let $p$ be an integer, $l\ge\max(0,-p)$ and $n=p+l$.
+
+(a) If $p\ge3$, then $Q_n(-l)=0$.
+
+(b) If $p=2$, then $Q_n(-l)=(-1)^l$, which is never $0$.
+
+(c) If $p\le1$, put $b=5-2p$. Then $Q_n(-l)=0$ if and only if $3b^2-2=y^2$ for an integer $y\ge0$ and $l=\frac12(3b-6\pm y)$, the lower sign only when that number is at least $0$.
+
+(d) The integers $p\le1$ at which (c) gives zeros are exactly $p_k=\frac12(5-b_k)$, $k\ge1$, where $y_k+b_k\sqrt3=(1+\sqrt3)(2+\sqrt3)^k$:
+\[
+p_k=1,\,-3,\,-18,\,-74,\,-283,\,-1063,\,-3974,\,\dots,\qquad p_{k+1}=4p_k-p_{k-1}-5.
+\]
+At $p_k$ the vanishing $l$ are $\lambda_{k-1}$ and $\lambda_k$ (for $k=1$ only $\lambda_1=4$), where $\lambda_k=\frac12(3b_k+y_k)-3$ for $k\ge0$:
+\[
+\lambda_k=-1,\,4,\,23,\,94,\,359,\,1348,\,5039,\,\dots,\qquad \lambda_{k+1}=4\lambda_k-\lambda_{k-1}+6.
+\]
+So each $\lambda_k$ with $k\ge1$ is a vanishing $l$ at both $p_k$ and $p_{k+1}$, and the parity of $p_k$ ($k\ge1$) runs odd, odd, even, even, repeating.
+
+In particular, at an integer $p\ge3$ the function $\Phi$ is regular at every $s=-l$, $l\ge0$; and at an integer $p\le2$ every logarithmic term of Theorem P1~(ii) is present except at the pairs $(p,l)$ of (d). For example, the term $u^4\ln(1/u)$ is absent at $p=1$, and the terms $u^4\ln(1/u)$ and $u^{23}\ln(1/u)$ at $p=-3$.
+
+\begin{proof}
+\emph{Step 1.} At $s=-l$ and $n=p+l$ the $m$-th term of $Q_n$ is $c_m\binom{p-m-1}{p+l-m}$, absent when $p+l-m<0$. Put $a=-p$. If $p-m-1\ge0$, the bottom exceeds the top, since $l\ge0$, and the binomial is $0$. If $p-m-1<0$, the reflection $\binom{-r}{j}=(-1)^j\binom{r+j-1}{j}$ with $r=m-p+1\ge1$ and $j=p+l-m\ge0$ gives $(-1)^{p+l-m}\binom{l}{p+l-m}=(-1)^{l-a-m}\binom{l}{a+m}$. With $\binom{l}{j}=0$ for $j<0$ or $j>l$, this expression also covers the first case ($a+m<0$) and the absent terms ($a+m>l$). As $c=(1,4,1)$,
+\[
+Q_{p+l}(-l)=(-1)^{l-a}B_a(l),\qquad B_a(l)=\binom{l}{a}-4\binom{l}{a+1}+\binom{l}{a+2}.\tag{V}
+\]
+
+\emph{Step 2.} If $p\ge3$, then $a+m\le-1$ for $m\le2$, and every binomial in $B_a$ is $0$: this is (a). If $p=2$, then $B_{-2}(l)=\binom{l}{0}=1$: this is (b).
+
+\emph{Step 3.} If $p=1$, then $B_{-1}(l)=l-4$, which is zero only at $l=4$; the formula of (c) gives $b=3$, $y=5$ and $l\in\{4,-1\}$, of which only $4$ is allowed. If $p\le0$, then $a\ge0$, $l\ge a$ and $\binom{l}{a}\ge1$. With $x=l-a\ge0$, $\binom{l}{a+1}=\binom{l}{a}\frac{x}{a+1}$ and $\binom{l}{a+2}=\binom{l}{a}\frac{x(x-1)}{(a+1)(a+2)}$, valid also for $x\in\{0,1\}$, so
+\[
+(a+1)(a+2)\,B_a(l)=\binom{l}{a}P_a(x),\qquad P_a(x)=x^2-(4a+9)x+(a+1)(a+2),
+\]
+and $B_a(l)=0$ if and only if $P_a(x)=0$. Since $P_a$ is monic with integer coefficients, its rational roots are integers, and it has an integer root if and only if its discriminant
+\[
+(4a+9)^2-4(a+1)(a+2)=12a^2+60a+73=3(2a+5)^2-2=3b^2-2
+\]
+is a square $y^2$. Then $(4a+9)^2-y^2=4(a+1)(a+2)$ is even, so $y$ is odd like $4a+9$, and both roots $x=\frac12(4a+9\pm y)$ are integers. They are distinct, since $3b^2-2\ge73$, and positive, since their sum $4a+9$ and their product $(a+1)(a+2)$ are positive. So both give $l=a+x>a=\max(0,-p)$, and, as $6a+9=3b-6$, $l=\frac12(3b-6\pm y)$. This is (c).
+
+\emph{Step 4.} For $p\le1$, $b=5-2p\ge3$ is odd, and (c) asks for $y^2-3b^2=-2$ in positive integers. The numbers $(1+\sqrt3)(2+\sqrt3)^k$ give solutions, since the norm $y^2-3b^2$ is multiplicative, $N(1+\sqrt3)=-2$, $N(2+\sqrt3)=1$, and their components are positive. Conversely, if $(y,b)$ is a positive solution with $b\ge2$, then $(y+b\sqrt3)(2-\sqrt3)=(2y-3b)+(2b-y)\sqrt3$ is a solution with $2y-3b>0$ (as $4y^2=12b^2-8>9b^2$), $2b-y>0$ (as $4b^2>3b^2-2=y^2$) and $2b-y<b$ (as $y^2=3b^2-2>b^2$). Repeating, $b$ decreases until $b=1$ and $y=1$, so $y+b\sqrt3=(1+\sqrt3)(2+\sqrt3)^j$ for some $j\ge0$. Multiplication by $2+\sqrt3$ sends $(y,b)$ to $(2y+3b,y+2b)$; as $(2+\sqrt3)+(2-\sqrt3)=4$ and $(2+\sqrt3)(2-\sqrt3)=1$, both sequences satisfy $x_{k+1}=4x_k-x_{k-1}$. The term $b_0=1$ is $p=2$, case (b). Every $b_k$ is odd, as $b_{k+1}\equiv b_{k-1}\pmod2$ and $b_0$, $b_1$ are odd, so every $p_k$ is an integer, and $p_{k+1}=\frac12(5-4b_k+b_{k-1})=4p_k-p_{k-1}-5$.
+
+\emph{Step 5.} At $p_k$ the roots are $\frac12(3b_k-6\pm y_k)$. The larger is $\lambda_k$. The step back, $(y_{k-1},b_{k-1})=(2y_k-3b_k,2b_k-y_k)$, gives $3b_{k-1}+y_{k-1}=3b_k-y_k$, so the smaller is $\lambda_{k-1}$; for $k=1$, $\lambda_0=-1$ is excluded. Since $\lambda_k+3=\frac12(3b_k+y_k)$ is a fixed combination of $b_k$ and $y_k$, it satisfies the same recurrence, which gives $\lambda_{k+1}=4\lambda_k-\lambda_{k-1}+6$. Finally $p_{k+1}\equiv p_{k-1}+1\pmod2$, so the parity repeats with period $4$ from $p_1=1$ and $p_2=-3$, both odd. This is (d).
+\end{proof}
+
+\noindent\textbf{Remark.} The $3$ of the Pell-type equation is $(c_1^2-4c_0c_2)/4$: for $c=(1,c_1,1)$ the same steps give the discriminant $(c_1^2-4)(a+2)^2+(2c_1+4)(a+2)+1$, which is $3(2a+5)^2-2$ at $c_1=4$. The roots of $1+4w+w^2$ are $-2\pm\sqrt3$, and the chain grows by the factor $2+\sqrt3$, the larger root of $1-4w+w^2$, whose coefficients are those of $B_a$.
+
+\noindent\textbf{Checks.} Every step was checked in exact integer arithmetic: (V) against the definition of $Q_n$ for $-60\le p\le8$ and $l\le240$; the quadratic identity for $0\le a\le60$ and $l\le600$; the square discriminants for $-2\le a\le200000$ are exactly those of the chain (through $p=-55383$), and $y^2-3b^2=-2$ has no other positive solution with $b\le400005$; the roots, both recurrences and the parity; and $B_a(l)=0$ at the stated $l$ for $p_k$ from $1$ to $-3974$, with $B_a(l\pm1)\ne0$ there. The formula for $G_l$ agrees with the Laurent coefficients read off a circle around the pole in the sweep of Section~\ref{sec:sweep}, an independent route, at the 48 meeting pairs with $-3\le p\le2$ and $l\le8$, among them the vanishing pairs $(-3,4)$ and $(1,4)$, to $3.3\times10^{-20}$ ($\xi=1/2$).
+
+\subsection{\texorpdfstring{Weights $(1,k,1)$}{Weights (1, k, 1)}: the descent, and the bridge to the Pell chain}\label{sec:family}
+
+In this subsection the weights are $c=(1,k,1)$ with $k$ any integer, so that $a_N=r^N(1+kw_N+w_N^2)$; $k$ names the middle weight here, not the index of $\tau_k$, and $Q_n$ and $B_a$ are those of Section~\ref{sec:chain} with $c_1=k$. At $k=4$ everything below is about the sum of Section~\ref{sec:setting}.
+
+\medskip
+\noindent\textbf{The continuation carries over.} With $w=\xi^N$, $a_Nb_N^{-s}=\xi^{N(s-p)}(1+kw+w^2)(1-w)^{-s}$, and the binomial series gives $(1+kw+w^2)(1-w)^{-s}=\sum_nQ_n(s)w^n$. So $\Phi=\sum_nQ_n\rho_n$ with $c=(1,k,1)$, the poles $\mathcal{P}$ are unchanged, and Lemma 4.2~(c), which uses only $\rho_n$, holds as written: at an integer $p\le2$ the term $G_lu^l\ln(1/u)$ is absent exactly where $Q_{p+l}(-l)=0$.
+
+\medskip
+\noindent\textbf{Coordinates and the two swaps.} For a meeting pair $(p,l)$ put $t=2-p$ and $x=l+p$ (in this subsection only; $x=n$ is the index of the meeting term, which is why only $x\ge0$ is a meeting). Two involutions act on pairs:
+\[
+\mathsf{S}:(t,x)\mapsto(x,t),\qquad \mathsf{T}:(t,x)\mapsto(t,kt+1-x).
+\]
+$\mathsf{S}$ is the other $p$ at the same $l$, $p'=2-l-p$; $\mathsf{T}$ is the other $l$ at the same $p$, $l'=2k+1-(k+2)p-l$.
+Let $z_0=z_1=0$ and $z_{i+1}=kz_i-z_{i-1}+1$ for all integers $i$ (so $z_2=1$, $z_3=k+1$, $z_4=k^2+k$, $z_{-1}=1$).
+
+\medskip
+\noindent\textbf{Proposition W} (the vanishing set at weights $(1,k,1)$). Let $p$ be an integer, $l\ge\max(0,-p)$ and $n=p+l$.
+
+(a) If $p\ge3$, $Q_n(-l)=0$. (b) If $p=2$, $Q_n(-l)=(-1)^l\ne0$.
+
+(c) If $p\le1$, $Q_n(-l)=0$ if and only if
+\[
+t^2-ktx+x^2=t+x.\tag{E$_k$}
+\]
+
+(d) For every integer $k$, the solutions of (E$_k$) in nonnegative integers are exactly the nonnegative pairs among $(z_i,z_{i+1})$, $i\in\mathbb{Z}$; each is carried to $(0,0)$ by steps $\mathsf{T}$ or $\mathsf{S}\mathsf{T}\mathsf{S}$, each lowering $t+x$.
+
+(e) For $k\ge2$, the pairs with $p\le1$ at which $Q_{p+l}(-l)=0$ are exactly $(p_j,\lambda_j)$ and $(p_{j+1},\lambda_j)$, $j\ge1$, where $p_j=2-z_{j+1}$ and $\lambda_j=z_{j+1}+z_{j+2}-2$; so $p_1=1$, $p_2=1-k$, $\lambda_1=k$, $\lambda_2=(k+1)^2-2$, and
+\[
+p_{j+1}=kp_j-p_{j-1}-(2k-3),\qquad \lambda_{j+1}=k\lambda_j-\lambda_{j-1}+2(k-1).
+\]
+Every member is joined to $(1,k)$ by $\mathsf{S}$ and $\mathsf{T}$ alternately, through members only. For $k=1$ they are $(1,1)$, $(0,1)$ and $(0,2)$; for $k=0$, $(1,0)$ only; for $k\le-1$, none.
+
+\smallskip
+At $k=4$, (e) is Proposition 4.4~(d) again ($p_j$ here is $p_k$ there), with the descent of (d) as a second, independent completeness step. At $k=3$, $p_j=3-\mathrm{Fib}_{2j+1}$ and $\lambda_j=\mathrm{Luc}_{2j+2}-4$ for $j\ge0$, with the Fibonacci and Lucas numbers $\mathrm{Fib}_1=\mathrm{Fib}_2=1$, $\mathrm{Luc}_1=1$, $\mathrm{Luc}_2=3$: the pairs $(1,3)$, $(-2,3)$, $(-2,14)$, $(-10,14)$, $(-10,43)$, \dots. At $k=2$, $z_i=i(i-1)/2$, $p_j=2-j(j+1)/2$ and $\lambda_j=(j+1)^2-2$: one chain, growing quadratically.
+
+\begin{proof}
+\emph{(a) to (c).} Step 1 of the proof of Proposition 4.4 never uses the value of $c_1$, so $Q_{p+l}(-l)=(-1)^{l-a}B_a(l)$ with $B_a(l)=\binom{l}{a}-k\binom{l}{a+1}+\binom{l}{a+2}$, $a=-p$; (a) and (b) follow as there. At $p=1$, $B_{-1}(l)=l-k$, while $t=1$, $x=l+1$ give $t^2-ktx+x^2-t-x=(l+1)(l-k)$, and $l+1\ne0$. At $p\le0$, Step 3 there gives $(a+1)(a+2)B_a(l)=\binom{l}{a}\bigl[(a+1)(a+2)-k(a+2)x+x(x-1)\bigr]$ with $x=l-a$, and with $t=a+2$ the bracket is $t^2-ktx+x^2-t-x$; since $\binom{l}{a}\ge1$, this is (c).
+
+\emph{(d).} (E$_k$) is symmetric, so $\mathsf{S}$ keeps it; at a fixed $t$ it is the quadratic $z^2-(kt+1)z+(t^2-t)=0$ in $z=x$, whose roots add to $kt+1$, so $\mathsf{T}$ keeps it. Let $(t,x)\ne(0,0)$ be a solution in nonnegative integers with $t\ge x$ (if $x>t$, exchange the roles, using $\mathsf{T}$). The other root in $t$ at this $x$, reached by $\mathsf{S}\mathsf{T}\mathsf{S}$, is $t'=kx+1-t$, an integer with $tt'=x^2-x\ge0$, so $t'\ge0$; if $x=0$ then $t'=0<t$, and if $x\ge1$ then $t'=x(x-1)/t\le x-1<t$. So $(t',x)$ is a nonnegative solution with a smaller sum, and repeating reaches $(0,0)$. Conversely, $v_i=z_{1-i}$ satisfies the same recurrence with the same two starting values, so $z_{1-i}=z_i$; then $\mathsf{T}(z_i,z_{i+1})=(z_i,z_{i-1})=(z_{1-i},z_{2-i})$ and $\mathsf{S}(z_i,z_{i+1})=(z_{-i},z_{1-i})$, so the set of consecutive pairs is closed under both, contains $(0,0)=(z_0,z_1)$, and $\mathsf{T}\mathsf{S}$ sends $(z_i,z_{i+1})$ to $(z_{i+1},z_{i+2})$: it is exactly the orbit of $(0,0)$.
+
+\emph{(e).} For $k\ge2$, induction gives $z_i\ge0$ and $z_{i+1}-z_i\ge(z_i-z_{i-1})+1$, so $0=z_1<z_2<z_3<\cdots$. The pairs in range ($t\ge1$, $x\ge0$, $t+x\ge2$, that is $p\le1$, $l+p\ge0$ and $l=t+x-2\ge0$) are $(z_m,z_{m+1})$ and $(z_{m+1},z_m)$ with $m\ge2$, which give $(p_{m-1},\lambda_{m-1})$ and $(p_m,\lambda_{m-1})$. From $z_j+z_{j+2}=kz_{j+1}+1$: $p_j+p_{j+1}=2-\lambda_j$ (the $\mathsf{S}$ relation) and $\lambda_{j-1}+\lambda_j=2k+1-(k+2)p_j$ (the $\mathsf{T}$ relation), and adding each at two neighbouring indices and using the other gives both recurrences. For $k=1$ and $k=0$, $z$ is periodic ($0,0,1,2,2,1$ and $0,0,1,1$), and the pairs in range are those listed. For $k\le-1$, $t^2-ktx+x^2\ge t^2+x^2\ge t+x$ on nonnegative integers, with equality only at $(0,0)$, $(0,1)$ and $(1,0)$, none in range. At $k=3$ the recurrences become $\nu_{j+1}=3\nu_j-\nu_{j-1}$ for $\nu_j=3-p_j$ and for $\mu_j=\lambda_j+4$; every other Fibonacci and Lucas number obeys the same rule, $G_{n+4}=3G_{n+2}-G_n$, and the starting values agree ($\nu_0=1$, $\nu_1=2$; $\mu_0=3$, $\mu_1=7$). At $k=2$, $z_{i+1}-2z_i+z_{i-1}=1$ gives the triangular numbers.
+\end{proof}
+
+\noindent\textbf{Proposition B} (the bridge: the Pell descent and the swap descent are one descent). Let $k\ne2$ (and $k\ne-2$ in (ii), where the form $U^2+2UV+V^2=(U+V)^2$ is degenerate), put $U=(k-2)t+1$, $V=(k-2)x+1$ and $\omega=\bigl(k+\sqrt{k^2-4}\bigr)/2$, so that $\omega^2=k\omega-1$ and $\omega\omega'=1$.
+
+(i) $(k-2)^2\bigl(t^2-ktx+x^2-t-x\bigr)=U^2-kUV+V^2-(2-k)$, so (E$_k$) reads $U^2-kUV+V^2=2-k$, and $U^2-kUV+V^2=N(U-V\omega)$ is a norm.
+
+(ii) In $(U,V)$, $\mathsf{S}$ is $(U,V)\mapsto(V,U)$ and $\mathsf{T}$ is $(U,V)\mapsto(U,kU-V)$. Both keep the form and have determinant $-1$: they are reflections. Their product $\mathsf{T}\mathsf{S}:(U,V)\mapsto(V,kV-U)$ has determinant $1$ and trace $k$, and it multiplies $U-V\omega$ by the unit: $(U-V\omega)\,\omega=V-(kV-U)\,\omega$.
+
+(iii) For $k\ge3$, along the chain, $(p_j,\lambda_j)$ is $(U,V)=(X_{j+1},X_{j+2})$ and $(p_{j+1},\lambda_j)$ is $(X_{j+2},X_{j+1})$, where $X_i=(k-2)z_i+1$, so $X_0=X_1=1$ and $X_{i+1}=kX_i-X_{i-1}$: each vanishing pair is two consecutive terms of the recurrence of multiplication by $\omega$.
+
+(iv) At $k=4$, $U=5-2p$ is the $b$ of Proposition 4.4, and $U^2-4UV+V^2=-2$ is $(V-2U)^2-3U^2=-2$. The vanishing pair with $(U,V)=(b_j,b_{j+1})$ holds the two neighbouring solutions $(y_j,b_j)=(V-2U,U)$ and $(y_{j+1},b_{j+1})=(2V-U,V)$ of $y^2-3b^2=-2$: $(U,V)=(3,11)$, $(11,41)$, $(41,153)$, $(153,571)$ at $p=1,-3,-18,-74$. At $k=3$ the form reads $U^2-3UV+V^2=-1$, on consecutive odd-index Fibonacci numbers.
+
+(v) At $k=1$, $0$ and $-1$, $\omega$ is a root of unity of order $6$, $4$ and $3$, so $(\mathsf{T}\mathsf{S})^6$, $(\mathsf{T}\mathsf{S})^4$ and $(\mathsf{T}\mathsf{S})^3$ are the identity and the orbits close with those periods. Outside the hypothesis: at $k=2$, $U=V=1$ at every pair and $\mathsf{T}\mathsf{S}$ is parabolic; at $k=-2$, $\omega=-1$, the form is degenerate and $\mathsf{T}\mathsf{S}$, with characteristic polynomial $(z+1)^2$, is parabolic as well.
+
+\smallskip
+\begin{center}
+\small
+\begin{tabular}{rrrrrr}
+vanishing pair $(p,l)$ & $U$ & $V$ & $y$ for $U$ & $y$ for $V$ & $U^2-4UV+V^2$\\
+\hline
+$(1,4)$ & 3 & 11 & 5 & 19 & $-2$\\
+$(-3,23)$ & 11 & 41 & 19 & 71 & $-2$\\
+$(-18,94)$ & 41 & 153 & 71 & 265 & $-2$\\
+$(-74,359)$ & 153 & 571 & 265 & 989 & $-2$\\
+$(-283,1348)$ & 571 & 2131 & 989 & 3691 & $-2$\\
+\end{tabular}
+
+\smallskip
+The bridge at $k=4$: each vanishing pair holds two neighbouring solutions $(y,U)$ and $(y,V)$ of $y^2-3b^2=-2$ (checked from the definition of $Q_n$).
+\end{center}
+
+So the descent in the proof of Proposition 4.4, which moves one solution at a time by the unit $2+\sqrt3$, and the descent of Proposition W~(d), which moves a pair at a time by one reflection, $\mathsf{T}$ or $\mathsf{S}\mathsf{T}\mathsf{S}$, are the same descent: since $\mathsf{S}^2=\mathsf{T}^2=1$, $\mathsf{T}=\mathsf{S}(\mathsf{T}\mathsf{S})^{-1}$ and $\mathsf{S}\mathsf{T}\mathsf{S}=(\mathsf{T}\mathsf{S})^{-1}\mathsf{S}$, so each step of W~(d) is one step down by the unit composed with the mirror, and two reflections compose into one hyperbolic rotation, the unit.
+
+\begin{proof}
+(i) Expand. For the norm, $N(a+b\omega)=a^2+kab+b^2$ since $\omega+\omega'=k$ and $\omega\omega'=1$; take $(a,b)=(U,-V)$. (ii) $\mathsf{S}$ exchanges $t$ and $x$; for $\mathsf{T}$, $V'=(k-2)(kt+1-x)+1=kU-V$. On columns, $\mathsf{S}=\begin{pmatrix}0&1\\1&0\end{pmatrix}$, $\mathsf{T}=\begin{pmatrix}1&0\\k&-1\end{pmatrix}$ and $\mathsf{T}\mathsf{S}=\begin{pmatrix}0&1\\-1&k\end{pmatrix}$; and $(U-V\omega)\omega=U\omega-V(k\omega-1)=V-(kV-U)\omega$. (iii) $X_{i+1}=(k-2)(kz_i-z_{i-1}+1)+1=kX_i-X_{i-1}$, and the pairs are read off Proposition W~(e). (iv) The step $(y,b)\mapsto(2y+3b,y+2b)$ of the proof of Proposition 4.4 gives $b_{j+1}=y_j+2b_j$, so $y_j=V-2U$ and $y_{j+1}=2y_j+3b_j=2V-U$. (v) $\mathsf{T}\mathsf{S}$ has characteristic polynomial $z^2-kz+1$, whose roots at $k=1,0,-1$ are primitive roots of unity of order $6$, $4$, $3$; the period carries to $(t,x)$ because $U$ and $V$ are affine in $t$ and $x$.
+\end{proof}
+
+\medskip
+\noindent\textbf{Remark} (one curve through every vanishing pair). For $k\ge3$ let $\cosh\theta=k/2$ and $X(s)=\cosh\bigl((s-\frac12)\theta\bigr)/\cosh(\theta/2)$ for real $s$. Then $X(0)=X(1)=1$ and $X(s+1)+X(s-1)=kX(s)$, so $X(i)=X_i$ at whole $i$; and for every real $s$ the point $\bigl(X(s),X(s+1)\bigr)$ lies on $U^2-kUV+V^2=2-k$, because $\cosh^2\varphi+\cosh^2(\varphi+\theta)-2\cosh\theta\cosh\varphi\cosh(\varphi+\theta)=-\sinh^2\theta$ and $\sinh^2\theta/\cosh^2(\theta/2)=4\sinh^2(\theta/2)=k-2$. So one smooth parametrization of a branch of the conic passes through every vanishing pair, in order. This is the classical closed form of a second-order linear recurrence, written for this one.
+
+\medskip
+\noindent\textbf{Remark} (the other side of the mirror). The mirror $U=V$ in the right-hand figure below is the swap $\mathsf{S}$. At $k=4$ the chain climbs by the unit $2+\sqrt3$; its conjugate $2-\sqrt3$ is the other side, and the two multiply to exactly one, $(2+\sqrt3)(2-\sqrt3)=4-3=1$. Write $(2+\sqrt3)^j=a_j+c_j\sqrt3$ with whole $a_j,c_j$; then $(2-\sqrt3)^j=a_j-c_j\sqrt3$, so the $\sqrt3$ parts of the two sides cancel, $(2+\sqrt3)^j+(2-\sqrt3)^j=2a_j$, and $a_j^2-3c_j^2=1$. The chain's members are made the same way: $y_j+b_j\sqrt3=(1+\sqrt3)(2+\sqrt3)^j$ gives $b_j=a_j+c_j$ and $y_j=a_j+3c_j$, and each member times its other side is the chain's own $-2$, $(y_j+b_j\sqrt3)(y_j-b_j\sqrt3)=(1+\sqrt3)(1-\sqrt3)\cdot1^j=-2$. This is classical (norms in $\mathbb{Z}[\sqrt3]$); it is the picture of the flip, not a new result.
+
+\medskip
+\noindent\textbf{Remark} (weights that do not read the same both ways). For weights $(c_0,c_1,c_2)$ the same steps give: at an integer $p\le1$, $Q_{p+l}(-l)=0$ exactly when
+\[
+c_0\,t(t-1)-c_1\,tx+c_2\,x(x-1)=0,
+\]
+which at $p=1$ reads $(l+1)(c_2l-c_1)=0$. The swap $\mathsf{S}$ keeps this exactly when $c_0=c_2$; but the quadratic carries two Vieta jumps of its own, which keep it for every weight: at fixed $t$ (fixed $p$) the other root $x'=(c_1/c_2)\,t+1-x$, and at fixed $x$ (fixed $n=p+l$) the other root $t'=(c_1/c_0)\,x+1-t$, integers whenever $c_2\mid c_1t$, respectively $c_0\mid c_1x$. At $(1,4,2)$ both are always integers, and the orbit of $(0,0)$ under them, read outward both ways, is one chain: through $(t,x)=(1,0)$ it gives $(p,l)=(1,2)$, $(-10,13)$, $(-10,32)$, $(-75,97)$, $(-75,208)$, $(-454,587)$, $(-454,1234)$, $(-2663,3443)$, $(-2663,7214)$, \dots, and through $(0,1)$ it gives $(-3,4)$, $(-3,13)$, $(-34,44)$, $(-34,97)$, $(-215,278)$, $(-215,587)$, $(-1270,1642)$, $(-1270,3443)$, \dots; an exact scan ($-300\le p\le1$, $l\le3000$) finds exactly the eleven members of the chain in that window and no other zero, and $Q_{p+l}(-l)$ computed from its definition is $0$ at every member listed. The pairs that share an $l$ across the two arms ($l=13$, $97$, $587$, $3443$, \dots) are joined by a third jump, along $t+x=l+2$, whose root sum $(6l+13)/7$ is an integer exactly when $7\mid6l+13$. At $(1,9,2)$ the fixed-$t$ jump is an integer only for even $t$, and the orbit of $(0,0)$ is finite: $(p,l)=(-8,9)$, $(-8,53)$, $(-394,439)$, $(-394,2132)$, $(-15245,16983)$, both ends stopping at a half-integer root; the scan finds the two members in its window, and no $p=1$ pair, since $c_1/c_2$ is not whole. So the symmetry of the weights is what makes the swap $\mathsf{S}$ a step; one chain does not need it. At $(1,4,2)$ every zero with $t,x\ge0$ does lie on this chain. At a zero with $t,x\ge1$, the fixed-$x$ jump lowers $t$ when $t^2>2x(x-1)$, and the fixed-$t$ jump lowers $x$ when $x^2>t(t-1)/2$; the new coordinate is a whole number, and it is nonnegative, since the product of the roots is $tt'=2x(x-1)$, respectively $xx'=t(t-1)/2$. One of the two always holds, for otherwise $t^2\le2x(x-1)<2x^2$ and $x^2\le t(t-1)/2<t^2/2$ give $t<\sqrt2\,x<t$. So the same descent as in Proposition W~(d) runs, with the two jumps in place of $\mathsf{T}$ and $\mathsf{S}\mathsf{T}\mathsf{S}$, lowering $t+x$ at every step, and it ends where $t=0$ or $x=0$, that is at $(0,0)$, $(0,1)$ or $(1,0)$; since each jump is its own inverse, the zero lies on the orbit of $(0,0)$. At $(1,9,2)$ the fixed-$t$ jump is not always an integer, and the orbit of $(0,0)$ is not all of the zeros: $(t,x)=(12297247,53935738)$, that is $(p,l)=(-12297245,66232983)$, is a zero with $t$ odd and $t^2<2x(x-1)$, so its only lowering jump is a half-integer and the descent stops there; it is the foot of a second chain, which climbs through $(t,x)=(473124396,53935738)$ and $(473124396,2075124045)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{loglogaxis}[scale only axis,width=0.34\textwidth,height=4.7cm,xlabel={$t=2-p$},ylabel={$l$},legend pos=north west,legend style={font=\scriptsize}]
+\addplot[blue,thick,mark=*,mark size=1.3pt] table[x=x,y=y]{fig_r5/r2_stairs_k4.dat};
+\addplot[red,thick,mark=square*,mark size=1.2pt] table[x=x,y=y]{fig_r5/r2_stairs_k3.dat};
+\addplot[green!50!black,thick,mark=triangle*,mark size=1.4pt] table[x=x,y=y]{fig_r5/r2_stairs_k2.dat};
+\legend{$k=4$,$k=3$,$k=2$}
+\end{loglogaxis}
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+\begin{loglogaxis}[scale only axis,width=0.34\textwidth,height=4.7cm,xlabel={$U$},ylabel={$V$},xmin=0.3,xmax=1000,ymin=0.3,ymax=1000]
+\addplot[gray,dashed,domain=0.3:1000,samples=2] {x};
+\addplot[blue,thick] table[x=U,y=V]{fig_r5/r2_bridge_curve.dat};
+\addplot[only marks,red,mark=*,mark size=1.8pt] table[x=U,y=V]{fig_r5/r2_bridge_pts.dat};
+\draw[->,very thick,orange] (axis cs:3,11) -- (axis cs:11,3);
+\draw[->,very thick,orange] (axis cs:11,3) -- (axis cs:11,41);
+\node[left,font=\scriptsize] at (axis cs:3,11) {$(3,11)$};
+\node[left,font=\scriptsize] at (axis cs:11,41) {$(11,41)$};
+\node[left,font=\scriptsize] at (axis cs:41,153) {$(41,153)$};
+\node[below right,font=\scriptsize] at (axis cs:11,3) {$(11,3)$};
+\end{loglogaxis}
+\end{tikzpicture}
+\end{center}
+\noindent{\small Left: the staircases for $k=2,3,4$, each corner a vanishing pair: the walk by $\mathsf{S}$ and $\mathsf{T}$ from $(p,l)=(1,k)$, plotted as $(2-p,l)$; at every corner $Q_{p+l}(-l)$ was computed from its definition and is $0$, and at $k=4$ a scan of every $p$ from $-300$ to $1$ and $l$ up to $1500$ finds no other zero. Right: $k=4$, the vanishing pairs on $U^2-4UV+V^2=-2$. The red dots are the pairs $(U,V)$ of consecutive terms $X_i$ and their mirror images; the dashed line is the mirror $U=V$; the blue line is the branch of the conic traced by $\bigl(X(s),X(s+1)\bigr)$; the orange arrows are $\mathsf{S}$ then $\mathsf{T}$, two reflections making one step of the unit, $(3,11)\mapsto(11,3)\mapsto(11,41)$.}
+
+\medskip
+\noindent\textbf{Checks.} Proposition W, Proposition B and the $k=3$ form were checked in exact integer arithmetic by a checker of 44 checks, all passing on 24 October and again, unchanged, on 27 October 2026. Among them: the reflection form of $Q_n(-l)$ for $-8\le k\le12$, $-24\le p\le6$ and $l\le100$; the descent run on every nonnegative solution with $t\le100\,000$ for $-8\le k\le12$ (1\,086 solutions, the longest descent 447 steps); the zeros of $Q_n(-l)$ computed from its definition, $-60\le p\le1$ and $l\le1500$ for $2\le k\le12$, $-40\le p\le1$ and $l\le600$ for $-8\le k\le1$ (1\,247\,772 values, 65 zeros, equal to (e)); the matrices, norms and orders of Proposition B; and the bridge at $k=4$ against the Pell solutions of Proposition 4.4. Polynomial identities (Proposition B~(i) and the quadratic identity of Step 3 of Proposition 4.4) are checked on grids with more points in each variable than the degree, which proves them; statements in which $l$ enters through a binomial coefficient or a sign are proved in the text and only sampled here. Two independent read-only checks by AI instruments did not break Propositions W and B; one computed $Q_n(-l)$ from the definition at 15\,839\,694 values ($-15\le k\le25$, $-150\le p\le8$, $l\le2500$; not exhaustive in $l$ for large $k$ near $p=-150$) and found its 130 zeros at $p\le1$ exactly where (e) puts them. The remark on general weights and the figure data were checked for this version (Section~\ref{sec:r5check}).
+
+\subsection{Beside the classical record: what is shared, and what is not}\label{sec:classical}
+
+\noindent\emph{What is shared.} Pell's equation: Brahmagupta (628) composed two solutions into a third; the cyclic method (chakravala) of Jayadeva and Bh\=askara~II (about 1150) solved it; Fermat posed $N=61$ and $N=109$ in 1657 and Brouncker answered with continued fractions; Lagrange proved that a solution always exists in the late 1760s (the sources read give 1766; the year was not re-checked for this note) [MT], [Wa]. Brahmagupta's composition is the multiplication by the unit $2+\sqrt3$ that steps the chain of Proposition 4.4. Replacing a solution by the other root of its quadratic is Vieta jumping, the method behind Problem~6 of the 1988 International Mathematical Olympiad, where $(a^2+b^2)/(ab+1)=k$ gives the conic $a^2-kab+b^2=k$, walked by the same swaps [IMO]; Lemmermeyer ties Vieta jumping to small norms in quadratic number fields [Le], which is the frame here (norm $-2$ in $\mathbb{Z}[\sqrt3]$ at $k=4$). Reading the two swaps as reflections in the automorphism group of a binary quadratic form, whose product is the automorph given by a unit, is classical (cited from memory, not searched). The values $b_j=1,3,11,41,153,571,\dots$ are a known integer sequence [OEIS].
+
+\medskip
+\noindent\emph{Archimedes.} In \emph{Measurement of a Circle}, Proposition 3, the proof that the circumference of a circle lies between $3\frac{10}{71}$ and $3\frac17$ diameters, Archimedes states $OA:AC>265:153$ and, in its second part, $AC:CB<1351:780$, where in each figure the ratio is $\sqrt3:1$; that is, $265/153<\sqrt3<1351/780$ [Ar, pp.~94 and~96]. He gives both fractions ``without any explanation as to how he arrived at them'' (Heath's note, [Ar, p.~93]). How he found them is not known: Davies begins ``We do not know how Archimedes proved'' this result [Da, p.~1], records the suggestion that Archimedes solved $a^2-3b^2=m$ for $m=1$ and $m=-2$ systematically and argues that it is not plausible on historical grounds [Da, Section~3], and proposes instead an interpolation method that yields both bounds [Da, Section~4].
+
+The connection this note makes is this. The chain of Proposition 4.4, which comes from the meeting residues of this pass sum and from nothing about $\sqrt3$ chosen in advance, lands on Archimedes' lower bound: $265^2-3\cdot153^2=-2$, so $(y,b)=(265,153)$ is the member $j=4$ of $y+b\sqrt3=(1+\sqrt3)(2+\sqrt3)^j$. It is held by the two vanishing pairs that share $b=153$ (the table in Section~\ref{sec:family}): $(p,l)=(-18,94)$, where $(U,V)=(41,153)$ and $265=2V-U$, and $(p,l)=(-74,359)$, where $(U,V)=(153,571)$ and $265=V-2U=571-2\cdot153$. So the terms $u^{94}\ln(1/u)$ at $p=-18$ and $u^{359}\ln(1/u)$ at $p=-74$ are absent. The solutions of $a^2-3b^2=-2$ in Davies' Table~2, $5/3$, $19/11$, $71/41$, $265/153$ and $989/571$ [Da, p.~4], are exactly the members $j=1$ to $5$ of the chain. The upper fraction solves $y^2-3b^2=+1$ ($1351^2-3\cdot780^2=1$) and is not on the chain. That a classical bound sits on this chain is a fact about the equation $y^2-3b^2=-2$. Nothing here claims Archimedes' method, and nothing classical is called new.
+
+\medskip
+\noindent\emph{What is not.} None of this is a new theorem about Pell's equation, Fibonacci numbers or Vieta jumping. What is specific to this note is that the meeting residues of $\Phi$ at integer $p$ vanish exactly on pairs of consecutive solutions. Whether this vanishing set, for weights $(1,4,1)$, $(1,k,1)$ or any weights, appears in published work has not been searched. Nothing here is called new.
+
+\section{Piece 2: what converges when u is at least 1}\label{sec:P2}
+
+Throughout this section $p<3$ is not an integer; the integer case for $u\ge1$ is not treated. Write the terms of C2 as $T^D_l(u)=R_l\,\Phi(-l)\,u^l$ and $T^R_{n,k}(u)=H(s_{n,k})\,Q_n(s_{n,k})\,u^{-s_{n,k}}/L$, so that $\row_n(u)=\sum_kT^R_{n,k}(u)$. Put
+\[
+\Theta(x)=\sum_{k\in\mathbb{Z}}\Gamma(p-2-i\tau_k)\,e^{i\tau_kx},
+\]
+a real, smooth, $L$-periodic function (its terms come in conjugate pairs, and its coefficients decay like $e^{-\pi|\tau_k|/2}$). Its mean over a period is $\Gamma(p-2)$, which is finite and not $0$, because $p$ is not an integer and $\Gamma$ has no zeros.
+
+\medskip
+\noindent\textbf{Lemma A} (asymptotics). As $K,n\to\infty$, uniformly in $u>0$:
+
+(A1) $T^D_K(u)=-\frac{1}{2L}K^{4-p}u^K\bigl[\Theta(\ln K)+O(1/K)\bigr]$.
+
+(A2) $\row_n(u)=\frac{1}{2L}n^{4-p}u^{n-p}\bigl[\Theta(\ln n+\ln u)+O(1/n)\bigr]$.
+
+(A3) For a fixed integer $d$ and $n=K+d$, at $u=1$: $T^D_K(1)+\row_n(1)=\frac{1}{2L}K^{3-p}\bigl[\Theta_1(\ln K)+O(1/K)\bigr]$, where
+\[
+\Theta_1(x)=\sum_{k\in\mathbb{Z}}\Gamma(p-2-i\tau_k)(4-p+i\tau_k)(d-p+i\tau_k)\,e^{i\tau_kx},
+\]
+whose mean is $\Gamma(p-2)(4-p)(d-p)\ne0$.
+
+\begin{proof}
+By Lemma L at $s=-K$, and $\binom{K+2}{2}K!=\Gamma(K+3)/2$,
+\[
+T^D_K(u)=-\frac{u^K}{2L}\sum_mc_m\sum_k\Gamma(p-m-i\tau_k)\,\frac{\Gamma(K+3)}{\Gamma(K+1+\gamma)},
+\]
+where $\gamma=\gamma_{m,k}=p-m-i\tau_k$. By Lemma R,
+\[
+\row_n(u)=\frac{u^{n-p}}{2L}\sum_mc_m\sum_k\Gamma(p-m-i\tau_k)\,\frac{\Gamma(3-p+n+i\tau_k)}{\Gamma(n-m+1)}\,u^{i\tau_k},
+\]
+and $|u^{i\tau_k}|=1$ for $u>0$, which is why the estimates are uniform in $u$. Split each $k$-sum at $|\tau_k|=K^{1/3}$ (respectively $n^{1/3}$); in the head every shift has modulus at most $2K^{1/3}$ for $K$ large.
+
+\emph{Head.} Lemma G$'$ with $z=K$, $\alpha=3$ and $\beta=1+\gamma$ gives
+\[
+\frac{\Gamma(K+3)}{\Gamma(K+1+\gamma)}=K^{2-\gamma}\Bigl(1+\frac{(2-\gamma)(3+\gamma)}{2K}+O\Bigl(\frac{(1+|\tau|)^4}{K^2}\Bigr)\Bigr),
+\]
+and with $z=n$, $\alpha=3-p+i\tau$ and $\beta=1-m$ it gives $\Gamma(3-p+n+i\tau)/\Gamma(n-m+1)=n^{2+m-p+i\tau}\bigl(1+O((1+|\tau|)^2/n)\bigr)$. Here $K^{2-\gamma}=K^{2+m-p}e^{i\tau_k\ln K}$. The weights $|\Gamma(p-m-i\tau_k)|\le C(1+|\tau_k|)^{p-m-1/2}e^{-\pi|\tau_k|/2}$ make $\sum_k|\Gamma(p-m-i\tau_k)|(1+|\tau_k|)^4$ finite, so the relative errors sum to $O(1/K)$ (respectively $O(1/n)$). The $m=2$ terms give $\Theta$; the $m=0,1$ terms are smaller by a factor $K^{-2}$ or $K^{-1}$.
+
+\emph{Tail.} For the rows, (G3) gives $|\Gamma(3-p+n+i\tau)|\le\Gamma(3-p+n)$, so the tail is $O\bigl(n^{4-p}e^{-\pi n^{1/3}/2}\,\mathrm{poly}(n)\bigr)$. For the $D$-terms, apply Lemma G with $x=K+1+p-m$, so that $\Gamma(K+1+\gamma)=\Gamma(x-i\tau)$. When $|\tau|\le x$, $g(v)\le v^2/2$ gives $1/|\Gamma(x-i\tau)|\le Ce^{\tau^2/(2x)}/\Gamma(x)\le Ce^{|\tau|/2}/\Gamma(x)$; with $\Gamma(K+3)/\Gamma(x)\le CK^{2+m-p}$ by (G2), and (G1) for $\Gamma(p-m-i\tau)$, the terms are $O\bigl(K^{2+m-p}e^{-(\pi-1)|\tau|/2}\bigr)$ times a power of $1+|\tau|$. When $|\tau|>x$, $g(v)\le\frac\pi2|v|-\frac12\ln(1+v^2)$ gives a factor $e^{\pi|\tau|/2}$, which cancels the decay of $\Gamma(p-m-i\tau)$, times $(1+\tau^2/x^2)^{1/4-x/2}$, which is at most $2^{1/4-x/2}$ for $x<|\tau|\le2x$ and at most $(|\tau|/x)^{1/2-x}$ beyond: exponentially small in $K$ and summable in $\tau$. Both tails are smaller than any power of $K$, relative to the head.
+
+\emph{(A3).} Add the two exact forms at $u=1$ term by term (same $m$, same $k$); the bracket is
+\[
+\frac12\Bigl[\frac{\Gamma(K+d+3-m-\gamma)}{\Gamma(K+d+1-m)}-\frac{\Gamma(K+3)}{\Gamma(K+1+\gamma)}\Bigr].
+\]
+Apply Lemma G$'$ with $z=K$: the first ratio has $\alpha-\beta=2-\gamma$ and $\alpha+\beta-1=2d+3-2m-\gamma$, the second has $\alpha-\beta=2-\gamma$ and $\alpha+\beta-1=3+\gamma$. The leading terms $K^{2-\gamma}$ cancel, and the next terms leave, the factor $\frac12$ in front of the bracket included, $K^{1-\gamma}(2-\gamma)(d-m-\gamma)/2=K^{1-\gamma}(2-\gamma)(d-p+i\tau)/2$. The $m=2$ terms give $K^{3-p}\Theta_1(\ln K)/(2L)$; the $m=0,1$ terms and the $O(K^{-\gamma})$ errors are $O(K^{2-p})$.
+\end{proof}
+
+\noindent\textbf{Lemma} (nonzero mean). If $\psi$ is real, continuous and $L$-periodic with mean $\mu\ne0$, then $|\psi(\ln K)|\ge|\mu|/2$ for infinitely many integers $K$.
+
+\begin{proof}
+The set $\{x:|\psi(x)|>|\mu|/2\}$ is open and not empty, so it contains an interval $I$ of length $\lambda>0$, modulo $L$. The numbers $\ln K$ increase to infinity with steps $\ln(K+1)-\ln K<\lambda$ once $K>1/\lambda$, so they land in $I+jL$ for every large $j$.
+\end{proof}
+
+\noindent\textbf{Theorem P2.} Let $p<3$, $p$ not an integer.
+
+(a) \emph{Single terms.} For $u\ge1$, $|T^R_{n,0}(u)|=\frac{1}{2L}|\Gamma(p-2)|\,n^{4-p}u^{n-p}\bigl(1+O(1/n)\bigr)\to\infty$, and $|T^D_l(u)|\ge c'l^{4-p}u^l$ for infinitely many $l$, with some $c'>0$. So for $u\ge1$ no arrangement of the single terms of C2 converges, and neither family converges on its own.
+
+(b) \emph{Rows.} For $u\ge1$, $|\row_n(u)|\ge c'n^{4-p}u^n$ for infinitely many $n$; the rows do not tend to $0$.
+
+(c) \emph{The pole ordering.} Fix $\theta_0\in(0,1)$ at distance at least $1/8$ from $\mathbb{Z}$ and from $\mathbb{Z}-p$, put $\sigma_K=-K-\theta_0$, and let $a_K(u)$ (not to be confused with the coefficients $a_N$ of Section~\ref{sec:setting}) be the sum of the C2 terms whose poles lie in $\sigma_K<\re s\le\sigma_{K-1}$: the pole $-K$ of $H$ and the row $n_K=K+d$, where $d=\lceil p+\theta_0-1\rceil$. For every $u>1$, $|a_K(u)|\ge c'K^{4-p}u^K$ for infinitely many $K$; at $u=1$, $|a_K(1)|\ge c'K^{3-p}$ for infinitely many $K$. Hence the C2 series summed in the pole ordering diverges for every $u\ge1$, and its partial sums are unbounded. (It converges to $\Psi(u)$ for every $0<u<1$, by Theorem P1~(i).)
+
+(d) \emph{The contour remainder.} For every $u>0$, $\Psi(u)=S_K(u)+R_K(u)$ (Proposition 4.1), and $S_K(u)$ is a partial sum of the pole-ordered series. Hence for every $u\ge1$ the remainders $R_K(u)$ are unbounded in $K$.
+
+(e) \emph{Bracketings, under a hypothesis.} Let $u>1$ and put $\psi_u(x)=u^{d-p}\Theta(x+\ln u)-\Theta(x)$. If $\psi_u$ has no real zero, then $|S_K(u)|\to\infty$; so no subsequence of the partial sums of the pole-ordered series converges, or equivalently, no bracketing of that series converges. A sufficient condition, read off the Fourier coefficients (the coefficient test), is
+\[
+\sum_{k\ne0}|\Gamma(p-2-i\tau_k)|\,\bigl|u^{d-p}e^{i\tau_k\ln u}-1\bigr|<|\Gamma(p-2)|\,\bigl|u^{d-p}-1\bigr|.
+\]
+
+\begin{proof}
+(a) The $k=0$ term: by (R) with $\tau=0$, $T^R_{n,0}(u)=\frac{u^{n-p}}{2L}\sum_mc_m\Gamma(p-m)\Gamma(3-p+n)/(n-m)!$, and Lemma G$'$ with $z=n$ and the real shifts $\alpha=3-p$, $\beta=1-m$ gives the asymptotic form with its $1+O(1/n)$ ((G2) alone is one-sided). For $T^D$: (A1) and the nonzero-mean lemma with $\psi=\Theta$, whose mean $\Gamma(p-2)$ is not $0$.
+
+(b) (A2) and the lemma with $\psi(x)=\Theta(x+\ln u)$.
+
+(c) The strip $(\sigma_K,\sigma_{K-1}]$ has width $1$ and contains exactly one integer, $-K$, and exactly one point of $p-\mathbb{Z}$, namely $p-n_K$ (since $p+\theta_0$ is not an integer). For $u\ne1$, (A1), (A2), $n_K^{4-p}=K^{4-p}(1+O(1/K))$ and the Lipschitz bound on $\Theta$ give
+\[
+a_K(u)=\frac{1}{2L}K^{4-p}u^K\bigl[\psi_u(\ln K)+O(1/K)\bigr],
+\]
+and $\psi_u$ has mean $\mu=(u^{d-p}-1)\Gamma(p-2)$, which is not $0$ because $d-p\ne0$. The lemma gives $|a_K|\ge\bigl(|\mu|/(8L)\bigr)K^{4-p}u^K$ infinitely often. At $u=1$, use (A3) and the lemma with $\Theta_1$. If the partial sums were bounded by $M_0$, then $|a_K|\le2M_0$ for all $K$, contradicting $K^{4-p}u^K\to\infty$ ($u>1$) or $K^{3-p}\to\infty$ ($u=1$, $p<3$).
+
+(d) Proposition 4.1 holds for every $u>0$; $S_K$ is unbounded by (c), and $\Psi(u)$ is finite.
+
+(e) Write $\omega_K=K^{4-p}u^K$. From (c), $a_K=\frac{1}{2L}\omega_K\bigl[\psi_u(\ln K)+O(1/K)\bigr]$. With $\omega_{K-j}/\omega_K=u^{-j}(1+O(j/K))$ and $\psi_u(\ln(K-j))=\psi_u(\ln K)+O(j/K)$ for $j\le K/2$, and the terms with $j>K/2$ bounded by $CK\omega_{K/2}=o(\omega_K/K)$,
+\[
+S_K=\frac{1}{2L}\,\omega_K\Bigl[\frac{u}{u-1}\,\psi_u(\ln K)+O(1/K)\Bigr].
+\]
+If $\psi_u$ has no real zero, then, being continuous and periodic, it satisfies $|\psi_u|\ge c_0>0$ everywhere, and $|S_K|\ge c'\omega_K\to\infty$. The coefficient test: $\psi_u$ has Fourier coefficients $\Gamma(p-2-i\tau_k)\bigl(u^{d-p}e^{i\tau_k\ln u}-1\bigr)$, and a function whose mean exceeds in modulus the sum of the moduli of its other coefficients has no zero.
+\end{proof}
+
+\noindent\textbf{What is proved in (e), and what is not.} Proved: the conclusion of (e) under the hypothesis that $\psi_u$ has no real zero, which the coefficient test guarantees and which can be checked for given $(\xi,p,u)$. Not proved: the same conclusion without that hypothesis. Suppose $\psi_u$ has a zero $x_0$ (simple, say). Then $S_K/\omega_K$ is small when $\ln K$ is near $x_0$ modulo $L$, and a bounded subsequence of $S_K$ would need $|S_K|/\omega_K=O(K^{p-4}u^{-K})$, which is exponentially small, at infinitely many $K$. That needs $\ln K$ to lie within an exponentially small distance of $x_0+jL$, plus a correction series in $1/K$, for infinitely many $K$. Since the spacing of $\ln K$ near $K$ is $1/K$, first-order analysis cannot exclude this, and every finite-order expansion of $S_K/\omega_K$ in powers of $1/K$ leaves the factor $u^K$ over. Excluding it needs a Diophantine statement about how closely $\ln K$ (mod $L$) approaches the zeros of $\psi_u$: for a zero $x_0$, how closely the numbers $e^{x_0+jL}=\xi^{-j}e^{x_0}$ approach integers, infinitely often. That statement is not proved here, and no route to it in general has been found. Two notes on the wording. The statement concerns bracketings of the pole-ordered series only: a pairing with a fixed shift $d'$ falls under the argument of (c), since its mean is $(u^{d'-p}-1)\Gamma(p-2)\ne0$, but pairings with varying shifts or group sizes are not covered. And at $u=1$, (e) is not claimed: $S_K(1)$ is $K^{4-p}$ times a log-periodic function that can itself have zeros, so only (c) and (d), unbounded partial sums, hold there.
+
+\medskip
+\noindent\textbf{Remarks.} (1) At $u=1$ the leading terms of $a_K$ cancel exactly ($u^{d-p}=1$), which is why the pole-ordered series diverges there only at the lower rate $K^{3-p}$; $u=1$ is the boundary of the convergence region.
+
+(2) Theorem P2 sharpens the statement of [PS] that the $l$-series diverges for $u>1$: it diverges for $u\ge1$, and so do the rows and the pole ordering. In the terms of [PS], for $p$ not an integer, the pole-ordered C2 series converges exactly for $0<u<1$ and diverges, with unbounded partial sums, for every $u\ge1$.
+
+(3) C1 at its own boundary. At $u=\xi/(1-\xi)=1/b_1$ the C1 series also diverges: its $l$-th term is $(-1)^l\binom{l+2}{2}u^{-3-l}\Phi(3+l)$ with $\Phi(3+l)=\sum_Na_Nb_N^{-3-l}\ge a_1b_1^{-3-l}$, every term being positive, so its modulus is at least $a_1\binom{l+2}{2}$, which tends to infinity. With Claim 4.1 of [D] (divergence for $u<\xi/(1-\xi)$), C1 diverges exactly on $0<u\le\xi/(1-\xi)$.
+
+(4) So for $\xi>1/2$ the closed band $1\le u\le\xi/(1-\xi)$ is a gap for both expansions in their natural orderings (C1 by Remark (3), C2 by (c)); the integral (MB) is the closed form there.
+
+\section{Numerical evidence}\label{sec:num}
+
+Everything in this section is evidence beside the proofs, not proof. It comes from the independent check's blind draw, except the labelled extras of Section~\ref{sec:extras} and the sweep in $p$ of Section~\ref{sec:sweep}, which are not blind. The design, with the bars below, was written before any point was drawn; the points were drawn by Python's \texttt{random.Random} with the seed \texttt{0x4b67d99a} (1265097114) and saved before any computation; and a failed bar is reported, not re-drawn. The draw gave nine cases $(\xi,p)$: six with $p$ not an integer, $(3/14,-3.165)$, $(3/14,1.835)$, $(11/43,-1.482)$, $(1/2,2.739)$, $(3/16,2.088)$ and $(3/4,1.904)$, and three with integer $p$, $(9/28,1)$, $(2/3,2)$ and $(3/31,0)$. The bars: a comparison at 30 digits passes at relative difference at most $10^{-28}$; an edge probe passes at most $10^{-10}$; a ratio of Piece 2 must move monotonically toward $1$ and lie within $0.05$ of it at $K=320$; a ratio of Piece 3 must be at most $2$. The arithmetic is floating point (mpmath 1.3.0 under Python 3.14.5, on one CPU core) at the stated working precision, with no interval or ball arithmetic. The relative difference of a value $x$ from a reference $y$ is $|x-y|/|y|$.
+
+\subsection{Lemma L}
+
+Lemma L against the continuation series $\sum_nQ_n\rho_n$ at the twelve drawn deep points, the $k$-sum taken directly to 60 or 150 shells (a $k$-sum to $N$ shells means the terms with $|k|\le N$) plus an Euler-Maclaurin tail:
+\begin{center}
+\begin{tabular}{lllll}
+$\xi$ & $p$ & $s$ & relative difference & digits\\
+\hline
+$3/14$ & $-3.165$ & $-11.4895+1.121i$ & $9.38\times10^{-41}$ & 40\\
+$3/14$ & $-3.165$ & $-19.5019+5.5878i$ & $2.23\times10^{-46}$ & 45\\
+$3/14$ & $1.835$ & $-17.2892+1.4925i$ & $2.35\times10^{-43}$ & 42\\
+$3/14$ & $1.835$ & $-17.1503+1.9357i$ & $1.71\times10^{-43}$ & 42\\
+$11/43$ & $-1.482$ & $-29.7041+4.3386i$ & $1.88\times10^{-50}$ & 49\\
+$11/43$ & $-1.482$ & $-24.5225+5.1422i$ & $4.29\times10^{-50}$ & 49\\
+$1/2$ & $2.739$ & $-27.4509+5.6077i$ & $8.57\times10^{-52}$ & 51\\
+$1/2$ & $2.739$ & $-12.8642-1.7175i$ & $9.79\times10^{-42}$ & 41\\
+$3/16$ & $2.088$ & $-28.8185+5.6616i$ & $2.78\times10^{-43}$ & 42\\
+$3/16$ & $2.088$ & $-20.8564-5.6244i$ & $1.29\times10^{-45}$ & 44\\
+$3/4$ & $1.904$ & $-16.7306-3.4767i$ & $5.03\times10^{-51}$ & 50\\
+$3/4$ & $1.904$ & $-6.5004+1.6651i$ & $3.05\times10^{-45}$ & 44\\
+\end{tabular}
+\end{center}
+Worst $9.38\times10^{-41}$: 12 of 12 pass the bar $10^{-28}$.
+
+Edge probes, at 40 working digits, with the Euler-Maclaurin tail taken from 400 shells:
+\begin{center}
+\begin{tabular}{llll}
+$\xi$ & $p$ & $s$ & relative difference\\
+\hline
+$3/14$ & $-3.165$ & $-0.3312+0.4587i$ & $1.70\times10^{-13}$\\
+$3/14$ & $1.835$ & $-0.6008-1.0626i$ & $1.24\times10^{-27}$\\
+$11/43$ & $-1.482$ & $-0.4133-0.0896i$ & $1.43\times10^{-18}$\\
+$1/2$ & $2.739$ & $-0.8436-0.0523i$ & $4.36\times10^{-39}$\\
+\end{tabular}
+\end{center}
+All 4 pass the bar $10^{-10}$. The direct 400-shell sums alone were off by $9.6$, $1.1\times10^{-2}$, $2.2\times10^{-1}$ and $1.3\times10^{-3}$: near the edge the tail is most of the sum, as the decay $|\tau_k|^{\re s-1}$ of the terms says.
+
+Inside the strip $p<\re s<0$ for $(3/14,-3.165)$: (L) against the defining $N$-series, $2.97\times10^{-41}$ at $-1.5417-1.2552i$ and $5.31\times10^{-35}$ at $-0.8152-2.4658i$; the continuation series against the $N$-series, $5.8\times10^{-41}$ and $2.2\times10^{-41}$.
+
+Lemma R: the form (R) against $H(s)Q_n(s)$ computed directly, at 40 random triples (case, $n$, $k$) with $n$ up to 130 and $k$ up to 15, drawn by a generator seeded from the draw's seed: worst $2.91\times10^{-39}$. The Rice form (Lemma L at $s=-l$) against the finite sum of geometric sums at $l=5,12,25$: $6.3\times10^{-21}$, $6.3\times10^{-37}$ and $7.7\times10^{-44}$ for $(3/14,-3.165)$, and $3.2\times10^{-20}$, $1.7\times10^{-33}$ and $1.0\times10^{-40}$ for $(3/14,1.835)$, each at the truncation of its $k$-sum.
+
+\subsection{Piece 1}
+
+Theorem P1~(ii) at the drawn integer cases, against the direct sum, at 52 working digits, the series summed in the pole ordering, strip by strip (a strip is the unit strip $-l-\frac12<\re s\le-l+\frac12$, $l\ge0$, holding the pole $-l$ of $H$ and at most one row; these edges take $\theta_0=\frac12$, which at $p=-1.482$ lies $0.018$ from $p+\mathbb{Z}$, closer than the $1/8$ the admissibility rule of Section~\ref{sec:notation} requires: the edges pass no pole, so the sums are the right ones, and only the constants of Proposition 4.1 are not those of the theorem), until eight consecutive strips fall below the stop rule $10^{-30}$ (the value $u=0.9318$ was drawn near $1$):
+\begin{center}
+\begin{tabular}{lllll}
+$\xi$ & $p$ & $u$ & relative difference & strips\\
+\hline
+$9/28$ & $1$ & $0.783$ & $6.18\times10^{-31}$ & 357\\
+$9/28$ & $1$ & $0.1696$ & $4.76\times10^{-37}$ & 53\\
+$9/28$ & $1$ & $0.1093$ & $6.93\times10^{-39}$ & 44\\
+$2/3$ & $2$ & $0.384$ & $4.43\times10^{-34}$ & 87\\
+$2/3$ & $2$ & $0.2438$ & $8.01\times10^{-36}$ & 61\\
+$2/3$ & $2$ & $0.1611$ & $6.62\times10^{-37}$ & 48\\
+$3/31$ & $0$ & $0.4964$ & $6.74\times10^{-33}$ & 138\\
+$3/31$ & $0$ & $0.442$ & $1.77\times10^{-33}$ & 119\\
+$3/31$ & $0$ & $0.8333$ & $1.38\times10^{-30}$ & 537\\
+$3/31$ & $0$ & $0.9318$ & $8.44\times10^{-30}$ & 1419\\
+\end{tabular}
+\end{center}
+All 10 pass; worst $8.44\times10^{-30}$.
+
+Theorem P1~(i) at the drawn non-integer cases, with $\Phi(-l)$ computed only by the finite sum of geometric sums, never by Lemma L:
+\begin{center}
+\begin{tabular}{lllll}
+$\xi$ & $p$ & $u$ & relative difference & strips\\
+\hline
+$3/14$ & $-3.165$ & $0.8585$ & $7.32\times10^{-28}$ (first try) & 735\\
+ & & & $2.08\times10^{-30}$ (re-run) & 776\\
+$3/14$ & $-3.165$ & $0.089$ & $1.28\times10^{-38}$ & 47\\
+$3/14$ & $1.835$ & $0.697$ & $1.71\times10^{-31}$ & 227\\
+$3/14$ & $1.835$ & $0.5208$ & $1.14\times10^{-32}$ & 127\\
+$11/43$ & $-1.482$ & $0.0289$ & $1.92\times10^{-42}$ & 32\\
+$11/43$ & $-1.482$ & $0.2119$ & $5.68\times10^{-36}$ & 67\\
+$1/2$ & $2.739$ & $0.7077$ & $1.88\times10^{-31}$ & 212\\
+$1/2$ & $2.739$ & $0.0461$ & $3.97\times10^{-42}$ & 29\\
+\end{tabular}
+\end{center}
+All 8 pass after one re-run; worst $2.08\times10^{-30}$. At $(3/14,-3.165)$ and $u=0.8585$ the first run read $7.32\times10^{-28}$, a fail against the bar $10^{-28}$, with 735 strips, one more than the code's length cap: the loop had stopped at the cap before the stop rule fired. The cap had been sized with $l^5u^l$, while the terms are $O(l^{4-p}u^l)$ (Lemma 4.3), here $l^{7.165}u^l$, so the cap was short exactly when $p$ is very negative. The checking code failed, not the expansion. The cap was changed to the exponent $4-p+2$, the first-try record was kept, and the same point was re-run: $2.08\times10^{-30}$, with the stop rule firing at 776 strips. The control point of the same case read $1.28\times10^{-38}$ again.
+
+The closed forms behind $F_l$ and $G_l$ were checked as described in Section~\ref{sec:coeff}.
+
+\subsection{Piece 2}
+
+There are two drawn cases, computed at 40 working digits. In the tables, the columns $T^D_K/(\mathrm{A1})$ and $\row/(\mathrm{A2})$ are the ratios to the leading forms of Lemma A at the drawn $u$; $a_K(1)/(\mathrm{A3})$ is the ratio at $u=1$; $a_K(u)/\mathrm{lead}$ is $a_K(u)$ against $\frac{1}{2L}K^{4-p}u^K\psi_u(\ln K)$ from the proof of Theorem P2~(c); and the last column is $a_K(1)$ itself.
+
+Case $(\xi,p)=(3/4,1.904)$, $\theta_0=0.452$, $d=2$, drawn $u=1.571$:
+\begin{center}
+\begin{tabular}{rrrrrr}
+$K$ & $T^D_K/(\mathrm{A1})$ & $\row/(\mathrm{A2})$ & $a_K(1)/(\mathrm{A3})$ & $a_K(u)/\mathrm{lead}$ & $a_K(1)$\\
+\hline
+40 & 1.0672 & 0.9682 & 1.0361 & 1.1901 & $-229.2$\\
+80 & 1.0334 & 0.9837 & 1.0181 & 1.0938 & $-481.4$\\
+160 & 1.0167 & 0.9918 & 1.0090 & 1.0466 & $-1020.0$\\
+320 & 1.0083 & 0.9959 & 1.0045 & 1.0232 & $-2170.5$\\
+\end{tabular}
+\end{center}
+Case $(\xi,p)=(1/2,2.739)$, $\theta_0=0.421$, $d=3$, drawn $u=1.191$:
+\begin{center}
+\begin{tabular}{rrrrrr}
+$K$ & $T^D_K/(\mathrm{A1})$ & $\row/(\mathrm{A2})$ & $a_K(1)/(\mathrm{A3})$ & $a_K(u)/\mathrm{lead}$ & $a_K(1)$\\
+\hline
+40 & 1.1350 & 1.0438 & 1.0279 & 1.3248 & 0.7936\\
+80 & 1.0670 & 1.0226 & 1.0141 & 1.1606 & 0.9382\\
+160 & 1.0333 & 1.0115 & 1.0071 & 1.0798 & 1.1165\\
+320 & 1.0166 & 1.0058 & 1.0036 & 1.0398 & 1.3333\\
+\end{tabular}
+\end{center}
+Every ratio moves monotonically toward $1$, at the rate $1/K$ that Lemma A states, and all are within $0.04$ of $1$ at $K=320$: pass. The size of $a_K(1)$ doubles by $2.10$, $2.12$ and $2.13$ in the first case, against $2^{3-p}=2.14$, and by $1.18$, $1.19$ and $1.19$ in the second, against $2^{3-p}=1.20$: the law $K^{3-p}$ of (A3), read directly, at a $p$ close to $3$ where it is slow. The coefficient test of Theorem P2~(e) holds at both drawn $u$ ($2.0\times10^{-15}$ against $0.49$, and $8.1\times10^{-6}$ against $0.058$).
+
+Partial sums of the pole-ordered series at $K=20,40,80,160,320$, on both sides of $u=1$. At $u=39/40$ they approach $\Psi$: in the second case the relative distance is $0.92$, $1.17$, $0.95$, $0.29$ and $0.012$; the first case approaches more slowly, its terms there decaying like $K^{2.1}(39/40)^K$. At $u=1$ they grow like $K^{4-p}$, with no sign of settling: $-1175$, $-4624$, $-18909$, $-79002$ and $-333821$ in the first case, and $21.6$, $36.4$, $71.3$, $154$ and $351$ in the second. At $u=41/40$ they explode: $-9.1\times10^{8}$ in the first case and $9.4\times10^{5}$ in the second, at $K=320$. This is Theorem P1~(i) and Theorem P2~(c) and (d), seen at the boundary from both sides.
+
+\subsection{Piece 3}
+
+The ratio $|\Phi(\sigma+it)|/\bigl[(1+|\sigma|)^A(1+|t|)^Be^{\pi|t|/2}\bigr]$ at the twelve drawn points, with $\sigma$ between $-42.1$ and $-5.3$ and $t$ between $0.9$ and $24.0$: largest $1.36\times10^{-3}$, at $(3/14,1.835)$ and $s=-16.895+0.934i$; smallest $1.1\times10^{-14}$; 12 of 12 pass the bar $2$. The growth rate in $t$, $\bigl(\ln|\Phi(\sigma+it)|-\ln|\Phi(\sigma)|\bigr)/t$, ranges from $-2.6$ to $0.93$, always below $\pi/2$. On the real axis $|\Phi(\sigma)|/|\sigma|^{2-p}$ lies between $0.003$ and $12.3$ across the six cases: bounded, of the size $l^{2-p}$ that Claim 5.4 of [D] gives.
+
+\subsection{Labelled extras, not blind}\label{sec:extras}
+
+These were chosen after the draw, for branches it missed. Theorem P1~(ii) at negative integer $p$: $1.06\times10^{-32}$ at $(\xi,p,u)=(9/28,-1,1/2)$, $1.83\times10^{-31}$ at $(2/3,-2,7/10)$ and $2.31\times10^{-35}$ at $(3/31,-2,1/4)$. Lemma L at the integer $p=1$ ($\xi=9/28$), off $\mathcal{P}$: $1.98\times10^{-44}$ at $-7.5+0.8i$ and $1.90\times10^{-43}$ at $-12.37-2.2i$. Lemma L at $p=-2$ ($\xi=2/3$) inside the strip, against the $N$-series: $8.81\times10^{-44}$ at $-1.3+0.6i$ and $1.26\times10^{-34}$ at $-0.7-1.9i$. No integer $p\le-3$ was tested in the blind draw or among these extras; the sweep of Section~\ref{sec:sweep} tests Theorem P1~(ii) at $p=-3$.
+
+\subsection{A sweep in $p$}\label{sec:sweep}
+
+Not from the blind draw: a sweep run on 24 October 2026 at $\xi=1/2$, except (A1), which does not depend on $\xi$; 160 jobs, none failed. (A1) is exact rational arithmetic; the rest is floating point at 20 to 30 working digits (mpmath, as above). It is evidence, not proof.
+
+(A1) $Q_{p+l}(-l)$ at every integer $p$ from $-290$ to $2$ and $\max(0,-p)\le l\le1400$, 368\,298 values: zero at exactly nine pairs, those of Proposition 4.4 in that range, $(1,4)$, $(-3,4)$, $(-3,23)$, $(-18,23)$, $(-18,94)$, $(-74,94)$, $(-74,359)$, $(-283,359)$ and $(-283,1348)$. For $3\le p\le6$ every value with $l\le60$ is zero.
+
+(A2) At the half-integers from $-7/2$ to $5/2$, Theorem P1~(i) against the direct sum at $u=1/10$, $1/2$ and $9/10$: relative differences from $10^{-31}$ to $10^{-20}$. Near an integer $j$, at $p=j\pm10^{-3}$ and $j\pm10^{-6}$, the two terms of each colliding pair, the residue at the pole $-l$ of $H$ and the residue at the nearby pole of $\Phi$, grow like $1/(p-j)$ with opposite signs, and their sum settles: at $u=1/2$ and $l=3$ it is $0.964936$ at $p=-3-10^{-6}$ and $0.964931$ at $p=-3+10^{-6}$. The agreement with the direct sum drops near an integer, to $1.6\times10^{-8}$ at $u=9/10$ and $p=-3\pm10^{-6}$, as the two large terms cancel. At the pairs $(-3,4)$ and $(1,4)$ of Proposition 4.4 neither term grows.
+
+(A3) Theorem P1~(ii) at the integers $p=-3,\dots,2$ against the direct sum at $u=1/10$, $1/2$ and $9/10$: relative differences at most $4.0\times10^{-24}$.
+
+(A4) $\Psi(u)$ is continuous across every integer $p<3$: for example $\Psi(1/2)=0.1223795$, $0.1224659$ and $0.1225523$ at $p=-3.001$, $-3$ and $-2.999$. As $p\to3$ from below, $(3-p)\Psi(1/2)=11.26$, $11.46$ and $11.52$ at $p=2.9$, $2.97$ and $2.99$, approaching $8/L=11.54$, the value $u^{-3}/L$ that the $m=0$ part of $a_N$ gives.
+
+(B) The zeros of $\Phi$ at 77 values of $p$ from $-3.05$ to $6.05$, in the boxes $p-\lceil p+12\rceil-\frac12\le\re s\le p+2$, $|\im s|\le5\pi/L$, counted by the argument principle (the winding number plus the poles inside) and located by a grid search refined by Newton's method and, on the real axis, by sign changes. At $p=1$ a real zero passes through the vanishing pole at $s=-4$, from left to right as $p$ increases: its distance from the pole $p-5$ is $0.19$ at $p=1\pm0.05$ and $0.038$ at $p=1\pm0.01$, and at $p=1$ both are gone. At $p=-3$ the same happens, at distance $0.013$ at $p=-3\pm0.05$. At $p=2.99$ and $p=3.01$ a row of complex zeros lies just above the negative real axis, at imaginary parts from $0.09$ to $1.02$. At $p=3$, where all thirteen real poles of $\Phi$ in the box with $\re s\le0$ vanish, that row is gone and nine real zeros lie in $(-12.5,0)$, spaced $1.2$ to $1.5$ apart; the zero counts on the two sides fit thirteen zeros cancelling against the thirteen vanishing poles. The path of the zeros between $p=2.99$ and $p=3$ was not computed. The same row of nine real zeros appears at $p=4$ and $p=6$. In 34 of the 77 rows the search found fewer zeros than the count, never more: by one at $p=-3\pm0.01$, and by four to eight in all 32 rows with $p\ge9/4$. The missing zeros are thought to lie close to poles, where the grid search does not see them; that was not checked.
+
+\subsection{Earlier checks from the author's record}\label{sec:earlier}
+\begingroup\sloppy
+
+These were run between 25 September and 11 October 2026, before this note and outside its blind draw. Each is quoted from its record file, named in brackets, and tagged MEASURED (the run printed it) or COMPUTED (arithmetic on printed numbers). None is blind unless it says so, and none is proof.
+
+\medskip
+\noindent\emph{(a) The source paper's eq.~67 on the Cauchy horizon} [\rec{RESULT_T7b.md}]. In the notation of [KT], put $q=b/2D$; the map of [PS, Section~2] is $r=q\,\xi^{-2}$, and the Cauchy horizon of [KT, eq.~63] is $u\to0$. MEASURED: on the horizon the per-pass ratio of eq.~67 as printed, read at $N=400$ from 50-digit values, equals $q/\xi^2$ at 24 of 24 grid points (worst relative difference $2.3\times10^{-19}$). COMPUTED: $q/\xi^2=r$, so the horizon line $\xi=\sqrt q$ is $r=1$, that is $p=0$, where $\Psi(0)=\sum_Na_N$ stops converging. The classical stability line of Morris, Thorne and Yurtsever, of [KT] and of Hawking is $\xi=q$. MEASURED: 5 of the 24 points are classically stable ($\kappa=(q/\xi)^2$ from $0.01$ to $0.44$) while the horizon terms grow by $1.25$ to $12.5$ per pass. The early passes mislead: at $(\xi,q)=(0.2,0.05)$ the ratio of the second term to the first is $0.789$ and climbs to $1.25$ by about $N=25$. Caveat, from [KT, p.~3945]: eq.~67 drops corrections of order $\rho/X$, and on the horizon its order-one parts cancel exactly, so whether the growth survives the full expression was not computed; this is the arithmetic of eq.~67 as printed, not a physical claim. The threshold $\xi^2>b/2D$ was not found in Visser hep-th/9303023, gr-qc/9311026, gr-qc/9702043 and gr-qc/0204022, Cassidy and Hawking hep-th/9709066, Kay, Radzikowski and Wald gr-qc/9603012, or Krasnikov gr-qc/9508038; Frolov (1991) and Klinkhammer (1992) were not visible (paywalled). The qualitative form has prior art: Grant, hep-th/9209102 (1993), footnote~16, citing Thorne by private communication. Not a claim of novelty.
+
+\medskip
+\noindent\emph{(b) The printed number of [KT, eq.~14]} [\rec{RESULT_T7b.md}]. The page (p.~3935) prints $T^{00}_{\max}\sim(l_P/D)(m_P/l_P^3)$, about $10^{-35}$ of the Planck density, ``i.e.'' about $10^{49}$\,g/cm$^3$ for $D$ of one meter. COMPUTED with CODATA 2018 values: the formula gives $8.33\times10^{58}$\,g/cm$^3$ ($\log_{10}=58.92$), $9.92$ decades above the printed number, and the paper's own round inputs give $10^{-35}\times10^{94}=10^{59}$. No erratum was found (the APS issue, INSPIRE, a web search), which does not mean none exists; this note does not call it a misprint. Nothing in this note rests on eq.~14.
+
+\medskip
+\noindent\emph{(c) Three of the strongest earlier checks of the closed form} (not blind). The far jump [\rec{REPORT_2026-09-28_opus_big-jump-and-third-pole_verbatim.md}]: a prediction from the small-$u$ expansion, written to 50 digits and hashed before the direct sums were run, at $(\xi,p)=(3/8,\,1.1201)$ and $(7/10,\,1.1368)$ and $u=10^{-300}\rho_x$ and $10^{-1000}\rho_x$ with $\rho_x=\xi/(1-\xi)$; the direct sums took 821, 2\,464, 2\,253 and 6\,772 passes at 100 digits (checked at 140). MEASURED: agreement to the 50 digits written at all four points (worst relative $7.91\times10^{-51}$; the pre-set bar was 45 digits), the ripple included. The line [\rec{DIAG14_NOT-BLIND_the-fold_2026-09-28.txt}]: the residues to the right of a vertical line plus the integral along the line, against the direct sum. MEASURED: 80 rows agree, 32 of them on the midpoint line between a colliding pair, worst relative $4.86\times10^{-30}$; and when the line crosses a pole at fixed $p$, the residue sum and the integral each change by that pole's residue, to $1.1\times10^{-21}$ to $4.1\times10^{-20}$ at the 4 crossings. The referee [\rec{REPORT_2026-09-28_opus_aaa-referee_verbatim.md}]: a rational fit (the AAA algorithm) to the transform computed from direct sums alone, at 486 points, judged by a contour integral against the formula with a bar of $10^{-10}$. MEASURED: rows 2 to 6 met the bar ($2.8\times10^{-15}$ to $7.8\times10^{-31}$); row 1, $(\xi,p)=(1/40,\,1.8)$, is a counted FAILURE ($4.4\times10^{-10}$ at the fit's degree cap of 80). A separately labelled re-run with cap 100 reached $5.61\times10^{-12}$; it is reported only, and the counted outcome stays FAILURE.
+
+\medskip
+\noindent\emph{(d) Two misses, reported.} A loop check [\rec{POSTRUN_2026-09-28_loop-vi_error-law_NOT-BLIND.txt}]: a 160-point trapezoid rule on the circle of radius $\frac14$ around a colliding pair, at 40 digits. MEASURED: it disagreed with the finite part by up to $0.704$, at $p=0.49758$; at every row above the 40-digit floor the error is $0.73$ to $1.5$ times the trapezoid law $(2|d|)^{160}$, $d$ being $p$ minus its nearest integer. Near a half-integer $p$ the poles reach the circle: the check's own design failed, not the closed form, which matched at the same cases by two other routes. A sign rule [\rec{DIAG4_NOT-BLIND_sign-rule-past-p1_2026-09-27.txt}]: a pre-registered rule took the sign of $\mathrm{slope}+p$ on the growing side, the slope being the measured small-$u$ slope of $\ln\Psi$ against $\ln u$, from the sign of $\Phi(0)$. MEASURED over 116 stand-in rows: right for $p\le0.97$ and wrong at $p\ge1.03$ (41 right, 12 wrong, 63 undecidable); there the sign of $A_{10}=H(p-1)(p+3)/L$, the coefficient of the $n=1$ pole, is right, and the restated rule reads 47 right, 0 wrong, 63 undecidable, with 6 rows in the band $0.97<p<1.03$ reported only. The expectation broke, not the closed form.
+
+\medskip
+\noindent\emph{(e) Near $p=2$} (not blind) [\rec{REPORT_2026-09-28_opus_cancellation-doubled_verbatim.md}; \rec{RESULT_2026-10-08_signflip-chase_TABLE.txt}]. MEASURED: the formula's two colliding residues grow like $1/|p-2|$ with opposite signs, and their sum passes smoothly through $p=2$: $-4.7889$ at $p=1.999$ and $-4.7910$ at $p=2.001$. In a fit of the two pieces from sampled data, the two pieces' errors lock equal and opposite (cosine $-1.0$) and grow as $|p-2|^{-3}$ (fitted exponents $3.02$ and $3.00$ over 14 points), while the error of the pair stays between $2.2\times10^{-11}$ and $5.3\times10^{-11}$. The coefficient of $u^0$ in Theorem P1~(i) is $\Phi(0)$, which at non-integer $p$ is $g_0+4g_1+g_2=\sum_mc_m/(\xi^{p-m}-1)$. A frozen, pre-registered chase at $\xi=1/40$, 49 points with $1.94\le p\le1.97$: it changes sign once, on both routes, the closed form and a referee built from direct sums alone, which agree within $10^{-30}$ of the scale $|g_0|+4|g_1|$ at all 49 points (MEASURED). COMPUTED, by bisection on the closed form: $p^*=1.9516704581340539208$, found again for this version by a root finder (Section~\ref{sec:r5check}). One $\xi$ only.
+
+\medskip
+\noindent\emph{(f) The radius of the small-$u$ series} (not blind) [\rec{RESULT_ATOM_MIRRORS_2026-10-09.md}]. At $\xi=1/3$ and $p=1$, where $\rho_x=\frac12$, the series of Theorem P1~(ii) summed to 20, 40 and 80 terms. MEASURED: at $u=9/10$ it settles slowly (relative difference from the direct sum $4.5\times10^{-3}$, $8.5\times10^{-3}$, $4.3\times10^{-4}$; last terms $3.9\times10^{-3}$, $5.2\times10^{-4}$, $4.0\times10^{-6}$); at $u=11/10$ and $3/2$ the relative difference grows to $6.4\times10^3$ and $3.8\times10^{14}$. This fits radius 1, not $\rho_x$: Theorem P1 gives convergence for $u<1$, and divergence for $u\ge1$ at integer $p$ is not proved here (Section~\ref{sec:open}).
+
+\medskip
+\noindent\emph{(g) Platform arithmetic} [\rec{RESULT_math-chase_2026-10-12.md}; \rec{GRADE_full_r5b_2026-10-10_1815.txt}]. MEASURED: the system math libraries of Windows (UCRT) and Ubuntu 24.04 (glibc 2.39), on $10^6$ inputs each for $\exp$, $\log$, $\mathrm{pow}$, $\sin$, $\cos$ and their single-precision forms, never differ by more than 1 ulp, and at every input where they differ one of the two is correctly rounded (checked against 200-bit values); glibc is right more often on 4 functions, Windows on 6. A C++ evaluation of the closed form run on the two machines differs in double precision by up to $2.85\times10^{-14}$ (one route, all 222 rows; the other routes less or not at all) and is identical on every line in 60-digit software arithmetic.
+
+\par\endgroup
+
+\subsection{Checks of this version}\label{sec:r5check}
+
+Not from the blind draw: a checker run on 29 October 2026 for the formulas written out in this version, twenty-two checks, all passing. Exact rational arithmetic: the closed forms of $Q_n(-l)$ and $Q_n'(-l)$ against a dual-number evaluation of the definition of $Q_n$ at every pair with $-8\le p\le2$ and $\max(0,-p)\le l\le80$ (855 pairs, no mismatch); the lines for $p=0,1,2$ for $l\le80$; $F_0$ at $p=0,1,2$ from Lemma 4.2~(c), split exactly into its constant part and its part in $1/L$, equal to the printed forms at $\xi=1/2,3/7,9/28,2/3,3/31$; the unmet-pole terms; the condition of the remark on general weights against the definition for six weight sets ($-30\le p\le1$, $l\le200$, 35\,802 values); the chains of that remark (at $(1,4,2)$ the two arms of the orbit of $(0,0)$ under the two Vieta jumps, equal to the printed lists, and at $(1,9,2)$ the five members of the finite orbit and its two half-integer ends; $Q_{p+l}(-l)=0$ from the definition at all 22 members; the root sum $(6l+13)/7$ of the third jump at the four shared $l$; and the quadratic at $(1,4,2)$ over $-2700\le p\le-301$, $l\le7300$, solved exactly at each $p$, with no zero off the chain); the descent of that remark at $(1,4,2)$, run from each of the 18 zeros with $t,x\ge0$ and $-3000\le p\le1$, every step lowering $t+x$ to a zero with nonnegative whole coordinates and every run ending at $(0,0)$, $(0,1)$ or $(1,0)$ (the longest in 9 steps); at $(1,9,2)$, in exact integers, the zero $(t,x)=(12297247,53935738)$ off the orbit of $(0,0)$, with $t$ odd and $t^2<2x(x-1)$, its half-integer lowering jump, and the two next members of its chain; the Archimedes lines of Section~\ref{sec:classical}, with the $-2$ rows of Davies' Table~2 against the chain; the other side of the mirror ($a_j^2-3c_j^2=1$, $b_j=a_j+c_j$, $y_j=a_j+3c_j$ and $y_j^2-3b_j^2=-2$ for $j\le60$); the arithmetic quoted in Section~\ref{sec:earlier}~(a) and~(b) (the five classically stable points; eq.~14 at $8.332\times10^{58}$\,g/cm$^3$, $9.921$ decades above the printed number); and the staircase data of the figure, every corner a zero of $Q_{p+l}(-l)$ from the definition. At 40 working digits (mpmath, as above): $H^0_l$ against $R_l\bigl(\psi(l+1)-\psi(l+3)\bigr)$ for $l\le29$; $F_l$ and $G_l$ from Lemma 4.2~(c) against the Laurent coefficients of $H\Phi$ read off a circle of radius $\frac14$ around $-l$ (96 points, $\Phi$ by the continuation series), at $\xi\in\{1/2,2/3\}$, $p\in\{-3,-1,0,1,2\}$ and five $l$ each, 50 cases: worst $4.1\times10^{-40}$ for $F_l$ and $1.2\times10^{-39}$ for $G_l$ (relative, or absolute where the coefficient is below 1); the two closed forms of $\Phi^0_l$ at $l=8,12,20$, with the $k$-sum taken to 400 shells and no tail, 24 cases: worst $3.5\times10^{-27}$; the curve of the remark in Section~\ref{sec:family} for $3\le k\le10$, at whole and non-whole $s$: worst scaled residual $2.9\times10^{-40}$; the zero of $g_0+4g_1+g_2$ at $\xi=1/40$ by a root finder, $1.95167045813405392080$, equal to the chase's $p^*$ to its 19 digits, with one sign change over 49 points of $[1.94,1.97]$, and $\Phi(0)$ by the continuation series equal to that finite form; Claim 3.1 as written out in Section~\ref{sec:draft}, the direct sum $\sum_Na_Nb_N^{-s}$ against the continuation series at 20 points with $\re s>p$ (worst $5.4\times10^{-40}$) and the residue of the series at 24 points of $\mathcal{P}$, read off a circle of radius $\frac14$ (96 points), against $Q_n(s_{n,k})/L$ (worst $6.2\times10^{-38}$); and the identity of Appendix~\ref{sec:appendix}, with $\int_0^{1/2}\pi t\cot\pi t\,dt=\frac12\ln2$, $-\ln(\ln2)=0.366513$ and $\frac14\ln10=0.575646$. One bar of the first run was wrong and is reported: the curve's data file stores ten significant digits, and a flat bar of $10^{-12}$ failed at $5.2\times10^{-10}$, the rounding of the file. The bar was reset to each point's own rounding bound, which every point meets (worst $0.94$ of its bound); the instrument broke, not the curve. Separately, every row of the bridge table of Section~\ref{sec:family} was checked in exact integers from the definition of $Q_n$; and a scan of the definition over $-300\le p\le1$ and $l\le3000$ gave the eleven pairs listed in that remark at $(1,4,2)$, the two at $(1,9,2)$, and at $(1,4,1)$ exactly the nine pairs of Proposition 4.4 in that range.
+
+\subsection{What these numbers are and are not}
+
+They are evidence that the formulas are the right formulas: an error in a residue sign, a coefficient, a missing term or a wrong domain would show as a loss of all digits, not of a few, and the blind points were chosen by no one. They are not proof, and they say nothing about Theorem P2~(e) beyond the coefficient test holding at two drawn values of $u$. The 30-digit bars sit two digits above the stop rules, and every achieved figure is listed, not only the pass marks. Earlier non-blind cross-checks exist and are not quoted here. The sweep's part (A1) and the checks of Proposition 4.4 are exact integer arithmetic; the sweep's other parts are floating point, like the rest of this section.
+
+\section{What is open}\label{sec:open}
+
+\begin{enumerate}
+\item \emph{The unconditional form of Theorem P2~(e).} It needs the Diophantine statement named in Section~\ref{sec:P2}: how closely $\ln K$ (mod $L$) approaches the zeros of $\psi_u$. The conditional form is proved; the unconditional form is outlined only.
+\item \emph{A literature search.} A targeted read of five papers is done (Section~\ref{sec:lineage}). The case $q_m=0$ of Lemma L is Ueno and Nishizawa's \cite{UN}; the form with a general shift $q_m$ was not found in those papers. A fuller search remains, and it also covers Theorem P3, Theorem P2~(c) at $u=1$, Proposition 4.4 and the vanishing set of Section~\ref{sec:family}. Until it ends, nothing here is called new.
+\item \emph{Murahara and Onozuka} \cite{MO}. A targeted read: it bounds $\zeta_q(s,t)$, their name for the two-variable function of [KKW], and $\zeta_q(s)=\zeta_q(s,s-1)$ on vertical lines with the real parts fixed, for large imaginary part (Section~\ref{sec:P3}); no bound uniform in $\sigma$ to the left, no sum of Gamma functions over $k$ and no Mellin-Barnes integral was found in what was read. Whether the far-left form of Theorem P3 goes beyond published work is a question for a fuller literature search and a mathematician's read.
+\item \emph{A mathematician's read.} None yet.
+\item \emph{Certified arithmetic.} The floating-point numerics use no interval or ball arithmetic; the exact parts are named in Section~\ref{sec:num}, at its end.
+\item \emph{Weights beyond $(1,k,1)$.} At weights $(c_0,c_1,c_2)$ with $c_0\ne c_2$ the two Vieta jumps of the quadratic replace $\mathsf{S}$ and $\mathsf{T}$ (Section~\ref{sec:family}): at $(1,4,2)$ they give one infinite chain through $(0,0)$, at $(1,9,2)$ a finite orbit. Whether every zero lies on the orbit of $(0,0)$ is proved at $(1,4,2)$, by the descent of the remark; at $(1,9,2)$ it is false, a second chain starting at $(p,l)=(-12297245,66232983)$ (Section~\ref{sec:family}); other asymmetric weights are not studied here.
+\item \emph{The sweep's zero count.} In 34 of the 77 rows of the zero map of Section~\ref{sec:sweep} the search found fewer zeros than the argument principle counts; where the missing zeros lie was not checked.
+\item \emph{Not treated here.} Theorem P2 at integer $p$; sharp exponents in Theorem P3; a line-by-line re-derivation of Claims 1.1 to 2.3 of [D] (Claim 3.1 is written out in Section~\ref{sec:draft}); numerical tests of Theorem P1~(ii) at integer $p\le-4$. Whittaker and Watson was not opened; its section number 12.31 is the one DLMF 5.9.10 attributes the formula to.
+\end{enumerate}
+
+\section{Where to look first}\label{sec:look}
+
+In the order the independent check suggests, with Proposition 4.4 and the closed forms and Section~\ref{sec:family}, added later, last:
+\begin{enumerate}
+\item Lemma L's contour (Section~\ref{sec:L}): the right and left vertical sides need $\re s<0$; the horizontal sides sit where $|E|\le1$; the two pole families never meet off $\mathcal{P}$; and the residue signs.
+\item The gap in Theorem P2~(e), and whether a cleaner unconditional statement exists (Section~\ref{sec:P2}).
+\item Theorem P3's case split, $|y|\le Y$ and $|y|>Y$, and the sum over the arithmetic progression $y_k$ (Section~\ref{sec:P3}).
+\item The double-pole residue, Lemma 4.2~(c), and the sign of the logarithm: $\ln(1/u)$ here, $-\ln u$ in Claim 6.1 of [D], the same term (Section~\ref{sec:P1}).
+\item Proposition 4.4: the reflection (V), the quadratic and the descent (Section~\ref{sec:chain}).
+\item The closed forms of $Q_n'(-l)$ and $F_l$, and the finite part $H^0_l$ (Lemma 4.2~(c), Section~\ref{sec:coeff}).
+\item Proposition W~(d), the step down by the other root, and Proposition B~(ii), the two reflections and the unit (Section~\ref{sec:family}).
+\end{enumerate}
+
+\appendix
+\section{Other checked math from the same notebook}\label{sec:appendix}
+\sloppy
+
+Not about the pass sum. Kept short. None of it was searched in the literature; it may be known, and nothing here is called new.
+
+\medskip
+\noindent\emph{The frozen lead} [\rec{RESULT_FROZEN_LEAD_2026-10-11.md}]. The loop $t\leftarrow rt$, $S\leftarrow S+t$ from $t=1$, $S=0$, with $r$ just below 1, tends to $T=r/(1-r)$, and $T-S_n=Tr^n$; let $\tau'=-1/\ln r$, the time constant. In floating point the sum stops changing once its terms are too small to register. The reasoning, written and frozen before the run: under round to nearest, in the last stretch every term between half a step and a full step of the stored numbers is rounded up to a full step, a net over-add of $(1-\ln2)/2\approx0.1534$ of a step times $\tau'$, which puts the frozen sum ahead of the true partial sum at that pass by $-\ln(\ln2)\approx0.3665$ time constants, whatever the precision. MEASURED (13 pre-set bars, 12 met, 1 not met): the lead read $0.374$ and $0.372$ in single precision, $0.349$ and $0.359$ in double, and $0.296$ and $0.386$ in x87 long double at the slow loops, although the single-precision step near the top is about $2^{29}$ times coarser; rounding down and toward zero fall behind, rounding up runs ahead, as predicted. The bar not met (B1c): one of 12 freeze passes fell outside its band. One machine, one starting value.
+
+\medskip
+\noindent\emph{One number read two ways} [\rec{RESULT_CONVERGE_ROADS_2026-10-11.md}]. From $\pi t\cot\pi t=1-2\sum_{m\ge1}\zeta(2m)t^{2m}$ for $|t|<1$,
+\[
+\sum_{m\ge1}\frac{\zeta(2m)}{(2m+1)\,4^m}=\int_0^{1/2}\bigl(1-\pi t\cot\pi t\bigr)\,dt=\frac{1-\ln2}{2},
+\]
+the last step by $\int_0^{1/2}\pi t\cot\pi t\,dt=\frac12\ln2$. COMPUTED: both sides agree at 40 digits (Section~\ref{sec:r5check}). MEASURED (all 5 pre-set bars met): the over-add split at a mark $M$ into a series part below it and a wave part above it keeps the total $(1-\ln2)/2$ at all 22 marks (within $10^{-40}$; worst $8.7\times10^{-60}$); the waste added per decade of $M$ reads $0.5576$, $0.5738$, $0.5755$, approaching $\frac14\ln10=0.5756$, so the waste grows like $\frac14\ln M$, while the net's change per decade falls by about ten each decade ($7.10\times10^{-3}$, $7.46\times10^{-4}$, $7.50\times10^{-5}$), as $1/(12M)$ does. Under stochastic rounding (each step rounded up or down at random, in proportion) the sum shows no lead in 12 of 12 cells and tracks the true sum on average (mean within $3.5$ standard deviations of zero in every cell).
+
+{\small\sloppy
+\begin{thebibliography}{DLMF}
+\bibitem[D]{D} Ronald Lee Hampton Jr., Proof draft: the closed form of the Kim and Thorne pass sum, in general, 27 September 2026, unpublished. Cited by its claim numbers.
+\bibitem[PS]{PS} Ronald Lee Hampton Jr., Problem statement: a Mellin-Barnes closed form for a pass sum in Kim and Thorne (1991), 23 October 2026.
+\bibitem[KKW]{KKW} M. Kaneko, N. Kurokawa and M. Wakayama, A variation of Euler's approach to values of the Riemann zeta function, Kyushu J. Math. 57 (2003), pages 175 to 192; arXiv math/0206171 (version 2 read in full on 24 October 2026).
+\bibitem[KT]{KT} S.-W. Kim and K. S. Thorne, Do vacuum fluctuations prevent the creation of closed timelike curves?, Phys. Rev. D 43 (1991), pages 3929 to 3947; DOI 10.1103/PhysRevD.43.3929.
+\bibitem[FGD]{FGD} P. Flajolet, X. Gourdon and P. Dumas, Mellin transforms and asymptotics: harmonic sums, Theoretical Computer Science 144 (1995), pages 3 to 58; DOI 10.1016/0304-3975(95)00002-E.
+\bibitem[PK]{PK} R. B. Paris and D. Kaminski, Asymptotics and Mellin-Barnes Integrals, Cambridge University Press, 2001; DOI 10.1017/CBO9780511546662.
+\bibitem[DLMF]{DLMF} NIST Digital Library of Mathematical Functions, \url{https://dlmf.nist.gov}. Section 2.5 (Mellin transform methods) was opened on 23 October 2026; 5.9.10 (Binet's first formula), 5.11.9 and 5.11.12 were checked at the source on 29 October 2026.
+\bibitem[WW]{WW} Whittaker and Watson, section 12.31, cited for Binet's first formula; the section number is confirmed by DLMF 5.9.10's attribution (29 October 2026); edition and page not checked.
+\bibitem[UN]{UN} K. Ueno and M. Nishizawa, Quantum groups and zeta-functions, in Quantum groups (Karpacz, 1994), PWN, Warsaw, 1995, pages 115 to 126; arXiv hep-th/9408143. Sections 1 and 5 and part of section 2 read on 24 October 2026, the rest by a targeted read.
+\bibitem[Ch]{Ch} I. Cherednik, On $q$-analogues of Riemann's zeta, arXiv preprint math/9804099 (title as the arXiv listing, v3, prints it). Targeted read on 24 October 2026.
+\bibitem[WY]{WY} Wakayama and Yamasaki, Integral representations of $q$-analogues of the Hurwitz zeta function, arXiv math/0503120. Targeted read on 24 October 2026.
+\bibitem[KWY]{KWY} Kawagoe, Wakayama and Yamasaki, $q$-Analogues of the Riemann zeta, the Dirichlet $L$-functions, and a crystal zeta function, arXiv math/0402135. Targeted read on 24 October 2026.
+\bibitem[MO]{MO} H. Murahara and T. Onozuka, A note on order estimates of the $q$-analogue of the Riemann zeta function, arXiv 2502.03842 (2025). Targeted read on 24 October 2026; Theorem 1.1 and Corollary 1.2 checked against v1 on 29 October 2026.
+\bibitem[Ar]{Ar} Archimedes, \emph{Measurement of a Circle}, in T. L. Heath (ed.), \emph{The Works of Archimedes}, Cambridge University Press, Cambridge, 1897, pages 91 to 98; Proposition 3 on pages 93 to 98. On page 94, ``$OA:AC\ [=\sqrt3:1]>265:153$''; on page 96, ``$AC:CB\ [=\sqrt3:1]<1351:780$''; the square brackets are Heath's, marking steps not in the Greek text. Heath's note on page 93 says the two approximations to $\sqrt3$ are given ``without any explanation as to how he arrived at them''. Read on 27 October 2026 in the archive.org full text (OCR) of the 1897 edition, item \texttt{worksofarchimede00arch}; the page images were not viewed, and the OCR garbles some symbols (it prints $1351$ as $13851$ on page 96, and the correct value on page 97).
+\bibitem[Da]{Da} E. B. Davies, Archimedes' calculations of square roots, arXiv:1101.0492v1 [math.HO], dated 3 January 2011, 15 pages. Pages 1 to 6 read on 27 October 2026 at arXiv.
+\bibitem[IMO]{IMO} International Mathematical Olympiad 1988, Problem 6, and the method called Vieta jumping, as presented in the Art of Problem Solving wiki and Wikipedia, read on 24 October 2026.
+\bibitem[Le]{Le} F. Lemmermeyer, Vieta jumping and small norms in quadratic number fields, arXiv 2601.15229 (2026). The title was checked on 24 October 2026; the content was not read.
+\bibitem[MT]{MT} MacTutor History of Mathematics, the history of Pell's equation, read on 24 October 2026.
+\bibitem[Wa]{Wa} M. Waldschmidt, a survey of Pell's equation and its history, read on 24 October 2026; the exact title and venue were not re-checked for this note.
+\bibitem[OEIS]{OEIS} The On-Line Encyclopedia of Integer Sequences, A001835, found by a search on 24 October 2026 and not re-checked for this note.
+\end{thebibliography}
+\par}
+
+\bigskip
+\noindent Drafted with AI assistance and verified against my records. Reviewed and approved by Ron Hampton.
+
+\end{document}
