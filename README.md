@@ -1,6 +1,6 @@
 # Proof pieces for a Mellin-Barnes closed form of a pass sum
 
-Ronald Lee Hampton Jr., VetTech Homefront LLC. 27 October 2026. Version 1.1, 29 October 2026 (version 1.0: 28 October 2026).
+Ronald Lee Hampton Jr., VetTech Homefront LLC. 27 October 2026. Version 1.2, 29 October 2026 (version 1.1: 29 October 2026; version 1.0: 28 October 2026).
 
 Collaborator: Elena Gortcheva, PhD, Program Director, Data Analytics.
 
@@ -25,25 +25,35 @@ through a Mellin-Barnes representation, with written proofs of the pieces the au
   the source. It also writes out the one result of the author's earlier draft that the proofs use (Claim 3.1). It proves that at the
   weights (1,4,2) every vanishing pair lies on one chain, and it gives a vanishing pair at (1,9,2) that does not. It is still read by no
   mathematician.
+- Version 1.2 (29 October 2026) changes no statement, proof, number or formula of 1.1. It adds disclosures to the paper's list of
+  what is open (Section 7): no AI verification pass opened Kim and Thorne's paper, so the identification of this sum with their
+  equation 67 rests on the author's reading; the proceedings details of Ueno and Nishizawa's paper were not verified; the second
+  chain at (1,9,2), three smaller fixes and the paper's sentence on how it was made were written after the last AI verification
+  pass and have had no later independent read; and the version 1.0 paper carries the earlier remark.
 - A search of the published sources reached (16 October 2026) did not find this closed form. Not found is not the same as new; a full
   search is still owed.
 - No physics claims are made. The sum comes from a physics paper; what is offered here is mathematics about the sum.
 
 ## Files
 
-- `paper/Hampton_pass-sum_proof-pieces_2026-10-27_r5d.pdf` and `.tex` (with its plot data in `paper/fig_r5/`): the proof pieces,
-  version 1.1. The version 1.0 files, `..._r5b.pdf` and `.tex`, stay beside them. Where the paper cites the author's working records by
-  file name (in typewriter type), those records are not in this repository.
+- `paper/Hampton_pass-sum_proof-pieces_2026-10-27_r5e.pdf` and `.tex` (with its plot data in `paper/fig_r5/`): the proof pieces,
+  version 1.2. The version 1.1 files, `..._r5d.pdf` and `.tex`, and the version 1.0 files, `..._r5b.pdf` and `.tex`, stay beside them.
+  Where the paper cites the author's working records by file name (in typewriter type), those records are not in this repository.
 - `paper/Hampton_problem-statement_for-outside-readers_2026-10-28_r2.pdf`: the problem stated with every symbol and its range, where
   the logarithms vanish (the Pell chain), the standing, and references (five pages; revised for version 1.1). The version 1.0 page,
   without `_r2`, stays beside it.
-- `checks/`: the checking scripts (Python) and what they printed. `check_r5d_2026-10-29.py` is the checker of version 1.1 (22 checks).
-  The earlier checkers look for the plot data in `fig_r5/` beside `checks/`; to run one, copy `paper/fig_r5/` there first.
+- `checks/`: the checking scripts (Python) and what they printed. `check_r5d_2026-10-29.py` is the checker of versions 1.1 and 1.2
+  (22 checks; 1.2 changes nothing it checks). The earlier checkers look for the plot data in `fig_r5/` beside `checks/`; to run one,
+  copy `paper/fig_r5/` there first.
 - `CITATION.cff`: how to cite this work.
+- `.zenodo.json`: what Zenodo reads when it archives a release (title, author, abstract with a line on how the work was made, keywords,
+  version). It names one license for the Zenodo record, CC BY 4.0; `LICENSE.md` gives the licenses of `paper/` and `checks/`.
 - `SHA256SUMS.txt`: a fingerprint of every file in this version; text files carry LF line ends in every clone, so the list matches
   any checkout or download. `SHA256SUMS.txt.ots`: an OpenTimestamps
   proof for that list (it carries only the list's hash; verifiable at opentimestamps.org), submitted on 29 October 2026; it is complete
   once the Bitcoin chain confirms it.
+- `timestamps/SHA256SUMS_2026-10-29.txt` and its `.ots`: version 1.1's fingerprint list (29 October 2026) and its OpenTimestamps proof,
+  confirmed in Bitcoin blocks 973691 and 973699.
 - `timestamps/SHA256SUMS_2026-10-28.txt` and its `.ots`: version 1.0's fingerprint list (28 October 2026) and its OpenTimestamps proof,
   confirmed in Bitcoin blocks 973597, 973607 and 973623.
 - `timestamps/SHA256SUMS_2026-10-27.txt` and its `.ots`: the first version's fingerprint list (27 October 2026) and its OpenTimestamps

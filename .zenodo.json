@@ -1,0 +1,20 @@
+{
+  "title": "Proof pieces for a Mellin-Barnes closed form of a pass sum",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "creators": [
+    {
+      "name": "Hampton Jr., Ronald Lee",
+      "affiliation": "VetTech Homefront LLC"
+    }
+  ],
+  "description": "A pass sum from Kim and Thorne (1991), written in a closed form through a Mellin-Barnes representation, with written proofs of the pieces an earlier draft left open, and the integer values where the logarithmic terms vanish: a chain given by the Pell-type equation y^2 - 3b^2 = -2. Checked by exact arithmetic and high-precision numerics; not yet read by a mathematician. The proofs and the checking programs were drafted with an AI instrument (Anthropic's Claude) at the author's direction and checked in AI verification passes; no mathematician has reviewed them yet.",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "Mellin-Barnes integral",
+    "asymptotic expansion",
+    "Pell equation",
+    "closed form"
+  ],
+  "version": "1.2"
+}
