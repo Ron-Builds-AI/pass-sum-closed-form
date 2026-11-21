@@ -6,8 +6,8 @@ authors:
     family-names: "Hampton"
     name-suffix: "Jr."
     affiliation: "VetTech Homefront LLC"
-version: "1.4"
-date-released: "2026-11-06"
+version: "1.5"
+date-released: "2026-11-20"
 license:
   - "CC-BY-4.0"
   - "MIT"
